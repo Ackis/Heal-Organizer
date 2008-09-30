@@ -1,0 +1,33 @@
+## Interface: 20400
+## Title: Heal Organizer 2.2
+## Notes: Organize the healer in a raid
+## Notes-deDE: Verwaltet die Heilerzuteilung in einem Schlachtzug
+## Author: Progman, Ackis
+## Version: 2.2
+## X-Category: Interface Enhancements
+## X-RelSite-Curse: 3930
+## X-RelSite-UI.WoW: 3222
+## X-AceForum: 2271
+
+## OptionalDeps: Ace2, ChatThrottleLib
+## X-Embeds: Ace2, ChatThrottleLib
+
+## SavedVariables: HealOrganizerDB
+## SavedVariablesPerCharacter: HealOrganizerDBPerChar
+
+Libs\AceLibrary\AceLibrary.lua
+Libs\AceOO-2.0\AceOO-2.0.lua
+Libs\AceDebug-2.0\AceDebug-2.0.lua
+Libs\AceAddon-2.0\AceAddon-2.0.lua
+Libs\AceDB-2.0\AceDB-2.0.lua
+Libs\AceConsole-2.0\AceConsole-2.0.lua
+Libs\AceEvent-2.0\AceEvent-2.0.lua
+Libs\AceLocale-2.2\AceLocale-2.2.lua
+Libs\ChatThrottleLib\ChatThrottleLib.lua
+
+HealOrganizer-enUS.lua
+HealOrganizer-deDE.lua
+HealOrganizer-frFR.lua
+HealOrganizer-zhTW.lua
+HealOrganizer.lua
+HealOrganizer.xml
