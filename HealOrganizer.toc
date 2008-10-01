@@ -5,6 +5,7 @@
 ## Author: Progman, Ackis
 ## Version: 2.2
 ## X-Category: Interface Enhancements
+## X-Feedback: http://wow.curse.com/downloads/wow-addons/details/heal-organizer.aspx
 ## X-RelSite-Curse: 3930
 ## X-RelSite-UI.WoW: 3222
 ## X-AceForum: 2271
@@ -15,15 +16,7 @@
 ## SavedVariables: HealOrganizerDB
 ## SavedVariablesPerCharacter: HealOrganizerDBPerChar
 
-Libs\AceLibrary\AceLibrary.lua
-Libs\AceOO-2.0\AceOO-2.0.lua
-Libs\AceDebug-2.0\AceDebug-2.0.lua
-Libs\AceAddon-2.0\AceAddon-2.0.lua
-Libs\AceDB-2.0\AceDB-2.0.lua
-Libs\AceConsole-2.0\AceConsole-2.0.lua
-Libs\AceEvent-2.0\AceEvent-2.0.lua
-Libs\AceLocale-2.2\AceLocale-2.2.lua
-Libs\ChatThrottleLib\ChatThrottleLib.lua
+embeds.xml
 
 HealOrganizer-enUS.lua
 HealOrganizer-deDE.lua
