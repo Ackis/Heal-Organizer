@@ -1,9 +1,9 @@
-## Interface: 20400
+## Interface: 30000
 ## Title: Heal Organizer 2.2
 ## Notes: Organize the healer in a raid
 ## Notes-deDE: Verwaltet die Heilerzuteilung in einem Schlachtzug
 ## Author: Progman, Ackis
-## Version: 2.2
+## Version: 2.21
 ## X-Category: Interface Enhancements
 ## X-Feedback: http://wow.curse.com/downloads/wow-addons/details/heal-organizer.aspx
 ## X-RelSite-Curse: 3930
