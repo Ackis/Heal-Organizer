@@ -88,8 +88,10 @@
         </Layers>
         <Frames>
             <Button name="$parentLabel" text="GROUP_LOCALE">
-                <ButtonText name="$parentText"/>
-                <NormalFont inherits="GameFontNormal"/>
+
+				<NormalFont style="GameFontNormal"/>
+				<HighlightFont style="GameFontHighlight"/>
+				<DisabledFont style="GameFontDisable"/>
                 <Anchors>
                     <Anchor point="TOP">
                         <Offset>
@@ -318,7 +320,7 @@
             </OnDragStop>
         </Scripts>
         <Frames>
-            <Frame name="$parentEinteilung" inherits="OptionFrameBoxTemplate"> <!-- {{{ -->
+            <Frame name="$parentEinteilung" inherits="OptionsBoxTemplate"> <!-- {{{ -->
                 <Size> 
                     <AbsDimension x="460" y="450"/> 
                 </Size>
@@ -331,7 +333,7 @@
                 </Anchors> 
                 <Layers>
                     <Layer level="ARTWORK">
-                        <FontString name="$parentRest" inherits="GameFontNormal" text="REST_LOCALE">
+                        <FontString name="$parentRest" inherits="GameFontHighlightSmall" text="REST_LOCALE">
                             <Anchors>
                                 <Anchor point="BOTTOMLEFT">
                                     <Offset x="10" y="145"/>
@@ -433,7 +435,7 @@
                         </Anchors>
                     </Frame>
                     <!-- }}} -->
-                    <Frame name="$parentOptionen" inherits="OptionFrameBoxTemplate"> <!-- {{{ -->
+                    <Frame name="$parentOptionen" inherits="OptionsBoxTemplate"> <!-- {{{ -->
                         <Size>
                             <AbsDimension x="160" y="70" />
                         </Size>
@@ -460,7 +462,7 @@
                             </Button>
                         </Frames>
                     </Frame> <!-- }}} -->
-                    <Frame name="$parentStats" inherits="OptionFrameBoxTemplate"> <!-- {{{ -->
+                    <Frame name="$parentStats" inherits="OptionsBoxTemplate"> <!-- {{{ -->
                         <Size>
                             <AbsDimension x="150" y="95" />
                         </Size>
@@ -554,7 +556,7 @@
                             </OnEscapePressed>
                         </Scripts>
                     </EditBox>
-                    <Frame name="$parentSets" inherits="OptionFrameBoxTemplate"> <!-- {{{ -->
+                    <Frame name="$parentSets" inherits="OptionsBoxTemplate"> <!-- {{{ -->
                         <Anchors>
                             <Anchor point="LEFT" relativeTo="$parent" relativePoint="LEFT">
                                 <Offset>
@@ -659,7 +661,7 @@
                     <!-- }}} -->
                 </Frames>
             </Frame> <!-- }}} -->
-            <Frame name="$parentBroadcast" inherits="OptionFrameBoxTemplate"> <!-- {{{ -->
+            <Frame name="$parentBroadcast" inherits="OptionsBoxTemplate"> <!-- {{{ -->
                 <Size> 
                     <AbsDimension x="460" y="75"/> 
                 </Size>
