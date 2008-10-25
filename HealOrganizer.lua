@@ -167,7 +167,6 @@ function HealOrganizer:OnInitialize() -- {{{
     
     self:RegisterEvent("CHAT_MSG_WHISPER");
     
-    self:Debug( "d1" );
     
     StaticPopupDialogs["HEALORGANIZER_EDITLABEL"] =
     { --{{{
@@ -201,8 +200,6 @@ function HealOrganizer:OnInitialize() -- {{{
         hasEditBox = 1,
     }; --}}}
     
-        self:Debug( "d2" );
-    
     StaticPopupDialogs["HEALORGANIZER_SETSAVEAS"] = 
     { --{{{
         text = L["SET_SAVEAS"],
@@ -230,7 +227,6 @@ function HealOrganizer:OnInitialize() -- {{{
         hasEditBox = 1,
     }; --}}}
     
-    self:Debug( "d3" );
     
     current_set = L["SET_DEFAULT"]
 
@@ -244,7 +240,6 @@ self:Debug( "d4" );
     for i=1, 20 do
         getglobal("HealOrganizerDialogEinteilungHealerpoolSlot"..i.."Label"):SetText(L["FREE"])
     end
-self:Debug( "d5" );
     
     HealOrganizerDialogEinteilungOptionenTitle:SetText(L["OPTIONS"])
     HealOrganizerDialogEinteilungOptionenAutofill:SetText(L["AUTOFILL"])
@@ -277,8 +272,8 @@ self:Debug( "d5" );
     HealOrganizerDialogClose:SetText(L["CLOSE"])
     HealOrganizerDialogReset:SetText(L["RESET"])
     -- }}}
-    self:Debug("locale zuende")
-    self:Debug("channel aus der DB ist gesetzt auf: \""..self.db.profile.chan.."\"")
+    self:Debug("end localization")
+    self:Debug("channel output: \""..self.db.profile.chan.."\"")
     -- standard fuer dropdown setzen 
     UIDropDownMenu_SetSelectedValue(HealOrganizerDialogEinteilungSetsDropDown, L["SET_DEFAULT"], L["SET_DEFAULT"]); 
     self:LoadCurrentLabels()
@@ -296,7 +291,7 @@ function HealOrganizer:OnDisable() -- {{{
 end -- }}}
 
 function HealOrganizer:RefreshTables() --{{{
-    self:Debug( "aktuallisiere tabellen")
+    self:Debug( "initialize table")
     stats = {
         DRUID = 0,
         PRIEST = 0,
@@ -348,8 +343,7 @@ function HealOrganizer:RefreshTables() --{{{
             end
         end
     end
-    self:Debug("stats generiert")
-    self:Debug("healertabelle aktuallisiert")
+    self:Debug("generate stats")
     -- healer[...] -> einteilungsarray
     -- einteilung resetten
     healingAssignment = 
@@ -368,7 +362,7 @@ function HealOrganizer:RefreshTables() --{{{
     for name, ort in pairs(healer) do
         table.insert(healingAssignment[ort], name)    
     end
-    self:Debug("einteilungstabelle aktuallisiert")
+    self:Debug("sort assignments")
     -- einteilungstabelle sortieren (Klasse, Name)
     local function SortEinteilung(a, b) --{{{
         if (self.db.profile.autosort or overrideSort) then
@@ -419,14 +413,14 @@ function HealOrganizer:RefreshTables() --{{{
             return true
 	else 
             if (position[a] and position[b]) then
-                self:Debug("sortdebug: ("..a..")"..position[a].." < ("..b..")"..position[b])
+                self:Debug("sorting: ("..a..")"..position[a].." < ("..b..")"..position[b])
                 if position[a] == position[b] and lastAction["position"] then
                     if lastAction["position"] == 0 then
                         if a == lastAction["name"] then -- Spieler a wurde verschoben
-                            self:Debug("sortdebug: a aus anderer grp - nach unten verschieben")
+                            self:Debug("sortDebug: point1")
                             return true
                         elseif b == lastAction["name"] then -- Spieler b wurde verschoben
-                            self:Debug("sortdebug: b aus anderer grp - nach unten verschieben")
+                            self:Debug("sortdebug: point2")
                             return false
                         end
                         return true
@@ -435,18 +429,18 @@ function HealOrganizer:RefreshTables() --{{{
                     --lastAction ist die letzte Aktion die ausgefuehrt wurde + Position von der bewegt wurde
                     if a == lastAction["name"] then -- Spieler a wurde verschoben
                         if lastAction["position"] > position[a] then-- kommt von Unten
-                            self:Debug("sortdebug: a, von unten")
+                            self:Debug("sortdebug: point3")
                             return true
                         else
-                            self:Debug("sortdebug: a, von oben")
+                            self:Debug("sortdebug: point4")
                             return false
                         end
                     elseif b == lastAction["name"] then -- Spieler b wurde verschoben
                         if lastAction["position"] > position[b] then-- kommt von Unten
-                            self:Debug("sortdebug: b, von unten")
+                            self:Debug("sortdebug: point5")
                             return false
                         else
-                            self:Debug("sortdebug: b, von oben")
+                            self:Debug("sortdebug: point5")
                             return true
                         end
                     end
@@ -476,10 +470,10 @@ function HealOrganizer:Dialog() -- {{{
     end
     self:UpdateDialogValues()
     if HealOrganizerDialog:IsShown() then
-        self:Debug("schliessen")
+        self:Debug("dialog: Hide")
         HealOrganizerDialog:Hide()
     else
-        self:Debug("Zeige dialog")
+        self:Debug("dialog: Show")
         HealOrganizerDialog:Show()
     end
 end -- }}}
@@ -593,8 +587,9 @@ function HealOrganizer:UpdateDialogValues() -- {{{
     -- }}}
     -- }}}
     -- {{{ Sets aktuallisieren 
-    local function HealOrganizer_changeSet(set)
-        self:Debug("aendern auf :"..set)
+    local function HealOrganizer_changeSet( frame )
+    	local set = frame:GetText();
+        self:Debug("HealOrganizer_changeSet: change set to "..set)
         UIDropDownMenu_SetSelectedValue(HealOrganizerDialogEinteilungSetsDropDown, set, set)
         -- healer temp save
         tempsetup[current_set] = {} -- komplett neu bzw. ueberschreiben
@@ -624,8 +619,8 @@ function HealOrganizer:UpdateDialogValues() -- {{{
 	           info.value = value
 	           info.func = HealOrganizer_changeSet
 	           info.arg1 = value
-	           self:Debug("value ist :"..info.value)
-	           self:Debug(selectedValue)
+	           self:Debug("DropDown_Initialize: value "..info.value)
+	           self:Debug("DropDown_Initialize: selectedValue: " .. selectedValue)
 	           if ( info.value == selectedValue ) then 
 	               info.checked = 1; 
 	           end
@@ -641,12 +636,12 @@ end -- }}}
 
 function HealOrganizer:ResetData() -- {{{
     -- einfach alle heiler löschen und neu bauen
-    self:Debug("healingAssignment resetten") 
+    self:Debug("ResetData: reset") 
     healer = {}
-    self:Debug("labels resetten")
+    self:Debug("ResetData: label reset")
     current_set = L["SET_DEFAULT"]
     self:LoadCurrentLabels()
-    self:Debug("slotlabels resetten")
+    self:Debug("ResetData: reset slot data")
     groupclasses = {}
     for i=1, self.CONST.NUM_GROUPS do
         groupclasses[i] = {}
@@ -655,7 +650,7 @@ function HealOrganizer:ResetData() -- {{{
 end -- }}}
 
 function HealOrganizer:BroadcastChan() --{{{
-    self:Debug("broadcast to chan")
+    self:Debug("BroadcastChan: broadcasting...")
     -- bin ich im chan?
     if GetNumRaidMembers() == 0 then
         self:ErrorMessage(L["NOT_IN_RAID"])
@@ -668,7 +663,7 @@ function HealOrganizer:BroadcastChan() --{{{
         return;
     end
     local messages = self:BuildMessages()
-    self:Debug("sende nachrichten in den chan "..self.db.profile.chan)
+    self:Debug("BroadcastChan: Send to channel "..self.db.profile.chan)
     for _, message in pairs(messages) do
         ChatThrottleLib:SendChatMessage("NORMAL", "HO: ", message, "CHANNEL", nil, id)
     end
@@ -676,7 +671,7 @@ function HealOrganizer:BroadcastChan() --{{{
 end -- }}}
 
 function HealOrganizer:BroadcastRaid() -- {{{
-    self:Debug("broadcast to raid")
+    self:Debug("BroadcastRaid: broadcasting...")
     if GetNumRaidMembers() == 0 then
         self:CustomPrint(1, 0.2, 0.2, self.printFrame, nil, " ", L["NOT_IN_RAID"])
         return;
@@ -738,13 +733,13 @@ function HealOrganizer:SendToHealers() -- {{{
 end -- }}}
 
 function HealOrganizer:ChangeChan() -- {{{
-    self:Debug("speicher channel")
+    self:Debug("ChangeChan: changing")
     self.db.profile.chan = HealOrganizerDialogBroadcastChannelEditbox:GetText()
 end -- }}}
 
 function HealOrganizer:HealerOnClick(a) -- {{{
-    self:Debug("Healer OnClick")
-    self:Debug(a)
+    self:Debug("HealerOnClick: click")
+    self:Debug("HealerOnClick: value " .. a)
 end -- }}}
 
 function HealOrganizer:HealerOnDragStart() -- {{{
