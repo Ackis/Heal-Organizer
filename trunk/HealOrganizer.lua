@@ -665,7 +665,7 @@ function HealOrganizer:BroadcastChan() --{{{
     local messages = self:BuildMessages()
     self:Debug("BroadcastChan: Send to channel "..self.db.profile.chan)
     for _, message in pairs(messages) do
-        ChatThrottleLib:SendChatMessage("NORMAL", "HO: ", message, "CHANNEL", nil, id)
+        ChatThrottleLib:SendChatMessage("NORMAL", "HO", message, "CHANNEL", nil, id)
     end
     self:SendToHealers()
 end -- }}}
@@ -678,7 +678,7 @@ function HealOrganizer:BroadcastRaid() -- {{{
     end
     local messages = self:BuildMessages()
     for _, message in pairs(messages) do
-        ChatThrottleLib:SendChatMessage("NORMAL", "", message, "RAID")
+        ChatThrottleLib:SendChatMessage("NORMAL", "HO", message, "RAID")
     end
     self:SendToHealers()
 end -- }}}
@@ -721,9 +721,7 @@ function HealOrganizer:SendToHealers() -- {{{
             if getn(healingAssignment[i]) ~= 0 then
                 for _, name in pairs(healingAssignment[i]) do
                     if UnitExists(self:GetUnitByName(name)) then
-                    	
-                   -- 	error('Usage: ChatThrottleLib:SendChatMessage("{BULK||NORMAL||ALERT}", "prefix", "text"[, "chattype"[, "language"[, "destination"]]]', 2)
-                        ChatThrottleLib:SendChatMessage("NORMAL", 'HO: ', string.format(L["ARRANGEMENT_FOR"], header), "WHISPER", nil, name)
+                        ChatThrottleLib:SendChatMessage("NORMAL", 'HO', string.format(L["ARRANGEMENT_FOR"], header), "WHISPER", nil, name)
                     end
                 end
             end
@@ -1062,7 +1060,9 @@ function HealOrganizer:ReplaceTokens(str) -- {{{
     return str
 end -- }}}
 
-function HealOrganizer:CHAT_MSG_WHISPER(msg, user) -- {{{
+function HealOrganizer:CHAT_MSG_WHISPER( ... ) -- {{{
+	local msg = select(2, ...);
+	local user = select(3, ...);
     if GetNumRaidMembers() == 0 then
         -- bin nicht im raid, also auch keine zuteilung
         return
@@ -1083,7 +1083,7 @@ function HealOrganizer:CHAT_MSG_WHISPER(msg, user) -- {{{
             reply = string.format(L["REPLY_ARRANGEMENT_FOR"], self:ReplaceTokens(text))
         end
         self:Debug("Sende Spieler %s den Text %q", user, reply)
-        ChatThrottleLib:SendChatMessage("NORMAL", nil, reply, "WHISPER", nil, user)
+        ChatThrottleLib:SendChatMessage("NORMAL", 'HO', reply, "WHISPER", nil, user)
     end
 end -- }}}
 
