@@ -177,22 +177,22 @@ function HealOrganizer:OnInitialize() -- {{{
             -- button gedrueckt, auf GetName/GetParent achten
             self:Debug("accept gedrueckt")
             self:Debug("ID ist "..change_id)
-            self:SaveNewLabel(change_id, getglobal(this:GetParent():GetName().."EditBox"):GetText())
+            self:SaveNewLabel(change_id, getglobal(self:GetParent():GetName().."EditBox"):GetText())
         end,
         OnHide = function()
-            getglobal(this:GetName().."EditBox"):SetText("")
+            getglobal(self:GetName().."EditBox"):SetText("")
         end,
         OnShow = function()
             if grouplabels[change_id] ~= nil then
-                getglobal(this:GetName().."EditBox"):SetText(grouplabels[change_id])
+                getglobal(self:GetName().."EditBox"):SetText(grouplabels[change_id])
             end
         end,
 	EditBoxOnEnterPressed = function()
-            self:SaveNewLabel(change_id, this:GetText())
-            this:GetParent():Hide()
+            self:SaveNewLabel(change_id, self:GetText())
+            self:GetParent():Hide()
         end,
         EditBoxOnEscapePressed = function()
-            this:GetParent():Hide();
+            self:GetParent():Hide();
         end,
         timeout = 0,
         whileDead = 1,
@@ -207,19 +207,19 @@ function HealOrganizer:OnInitialize() -- {{{
         button2 = TEXT(CANCEL),
         OnAccept = function()
             -- button gedrueckt, auf GetName/GetParent achten
-            self:SetSaveAs(getglobal(this:GetParent():GetName().."EditBox"):GetText())
+            self:SetSaveAs(getglobal(self:GetParent():GetName().."EditBox"):GetText())
         end,
         OnHide = function()
-            getglobal(this:GetName().."EditBox"):SetText("")
+            getglobal(self:GetName().."EditBox"):SetText("")
         end,
         OnShow = function()
         end,
 	    EditBoxOnEnterPressed = function()
-            self:SetSaveAs(getglobal(this:GetParent():GetName().."EditBox"):GetText())
-            this:GetParent():Hide()
+            self:SetSaveAs(getglobal(self:GetParent():GetName().."EditBox"):GetText())
+            self:GetParent():Hide()
         end,
         EditBoxOnEscapePressed = function()
-            this:GetParent():Hide();
+            self:GetParent():Hide();
         end,
         timeout = 0,
         whileDead = 1,
@@ -743,17 +743,17 @@ end -- }}}
 function HealOrganizer:HealerOnDragStart() -- {{{
     self:Debug("Healer OnDragStart")
     local cursorX, cursorY = GetCursorPosition()
-    this:ClearAllPoints();
+    self:ClearAllPoints();
 
-    this:StartMoving()
-    level_of_button = this:GetFrameLevel();
-    this:SetFrameLevel(this:GetFrameLevel()+30) -- sehr hoch
+    self:StartMoving()
+    level_of_button = self:GetFrameLevel();
+    self:SetFrameLevel(self:GetFrameLevel()+30) -- sehr hoch
 end -- }}}
 
 function HealOrganizer:HealerOnDragStop() -- {{{
     self:Debug("Healer OnDragStop")
-    this:SetFrameLevel(level_of_button)
-    this:StopMovingOrSizing()
+    self:SetFrameLevel(level_of_button)
+    self:StopMovingOrSizing()
 
     local pools = {
         "HealOrganizerDialogEinteilungHealerpool",
@@ -803,30 +803,30 @@ function HealOrganizer:HealerOnDragStop() -- {{{
             if (slot and group) then
                     self:Debug("Parent HealOrganizerDialogEinteilungHealGroup"..group.." und slot: "..slot)
             end
-            self:Debug("ich habe "..this:GetName())
-            self:Debug("vorher "..healer[this.username])
+            self:Debug("ich habe "..self:GetName())
+            self:Debug("vorher "..healer[self.username])
             -- den heiler da zuordnen
             if "HealOrganizerDialogEinteilungHealerpool" == pool then
-                healer[this.username] = "Rest"
-		position[this.username] = 0
+                healer[self.username] = "Rest"
+		position[self.username] = 0
             else
                 if group >= 1 and group <= self.CONST.NUM_GROUPS then
-                        lastAction["group"] = healer[this.username]
-                        healer[this.username] = group
+                        lastAction["group"] = healer[self.username]
+                        healer[self.username] = group
                 end
                 if slot >= 1 and slot <= self.CONST.NUM_SLOTS then
-                        lastAction["name"] = this.username
+                        lastAction["name"] = self.username
                         --Nur setzen wenn innerhalb einer Gruppe verschoben wird, 0 = Kommt von ausserhalb und wird an der position eingefuegt und Gruppe nach unten verschoben
                         if lastAction["group"] == group then
-                                lastAction["position"] = position[this.username]
+                                lastAction["position"] = position[self.username]
                         else
                                 lastAction["position"] = 0
                         end
                         --neue Position
-                        position[this.username] = slot
+                        position[self.username] = slot
                 end
             end
-            self:Debug("nachher "..healer[this.username])
+            self:Debug("nachher "..healer[self.username])
             break
         end
     end
@@ -839,8 +839,8 @@ function HealOrganizer:HealerOnLoad() -- {{{
     -- 0 = pool, MT1-M5
     -- 1 = slots
     -- 2 = passt ;)
-    this:SetFrameLevel(this:GetFrameLevel() + 2)
-    this:RegisterForDrag("LeftButton")
+    self:SetFrameLevel(self:GetFrameLevel() + 2)
+    self:RegisterForDrag("LeftButton")
 end -- }}}
 
 function HealOrganizer:EditGroupLabel(group) -- {{{
@@ -1088,14 +1088,14 @@ function HealOrganizer:CHAT_MSG_WHISPER( ... ) -- {{{
 end -- }}}
 
 function HealOrganizer:OnMouseWheel(richtung) -- {{{
-    if not this then
+    if not self then
         return
     end
     self:Debug("Mausrad:")
-    self:Debug(this)
-    self:Debug(this and this:GetName())
+    self:Debug(self)
+    self:Debug(self and self:GetName())
     self:Debug(richtung)
-    local _,_,group,slot = string.find(this:GetName(), "HealOrganizerDialogEinteilungHealGroup(%d+)Slot(%d+)")
+    local _,_,group,slot = string.find(self:GetName(), "HealOrganizerDialogEinteilungHealGroup(%d+)Slot(%d+)")
     group,slot = tonumber(group),tonumber(slot)
     if not group or not slot then
         self:Debug("kein match o_O")
