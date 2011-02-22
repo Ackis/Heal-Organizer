@@ -18,9 +18,9 @@
 
 embeds.xml
 
-HealOrganizer-enUS.lua
-HealOrganizer-deDE.lua
-HealOrganizer-frFR.lua
-HealOrganizer-zhTW.lua
+enUS.lua
+deDE.lua
+frFR.lua
+zhTW.lua
 HealOrganizer.lua
 HealOrganizer.xml
