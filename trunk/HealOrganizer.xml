@@ -104,7 +104,7 @@
                 </Size>
                 <Scripts>
                     <OnClick>
-                        HealOrganizer:EditGroupLabel(this:GetParent())
+                        HealOrganizer:EditGroupLabel(self:GetParent())
                     </OnClick>
                 </Scripts>
             </Button>

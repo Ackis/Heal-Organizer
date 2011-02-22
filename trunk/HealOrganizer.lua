@@ -177,7 +177,7 @@ function HealOrganizer:OnInitialize() -- {{{
             -- button gedrueckt, auf GetName/GetParent achten
             self:Debug("accept gedrueckt")
             self:Debug("ID ist "..change_id)
-            self:SaveNewLabel(change_id, _G[frame:GetParent():GetName().."EditBox"]:GetText())
+            self:SaveNewLabel(change_id, _G[frame:GetName().."EditBox"]:GetText())
         end,
         OnHide = function(frame)
             _G[frame:GetName().."EditBox"]:SetText("")
