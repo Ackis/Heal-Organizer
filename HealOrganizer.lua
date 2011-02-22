@@ -173,26 +173,26 @@ function HealOrganizer:OnInitialize() -- {{{
         text = L["EDIT_LABEL"],
         button1 = TEXT(SAVE),
         button2 = TEXT(CANCEL),
-        OnAccept = function(a,b,c)
+        OnAccept = function(frame)
             -- button gedrueckt, auf GetName/GetParent achten
             self:Debug("accept gedrueckt")
             self:Debug("ID ist "..change_id)
-            self:SaveNewLabel(change_id, getglobal(self:GetParent():GetName().."EditBox"):GetText())
+            self:SaveNewLabel(change_id, _G[frame:GetParent():GetName().."EditBox"]:GetText())
         end,
-        OnHide = function()
-            getglobal(self:GetName().."EditBox"):SetText("")
+        OnHide = function(frame)
+            _G[frame:GetName().."EditBox"]:SetText("")
         end,
-        OnShow = function()
+        OnShow = function(frame)
             if grouplabels[change_id] ~= nil then
-                getglobal(self:GetName().."EditBox"):SetText(grouplabels[change_id])
+                _G[frame:GetName().."EditBox"]:SetText(grouplabels[change_id])
             end
         end,
-	EditBoxOnEnterPressed = function()
-            self:SaveNewLabel(change_id, self:GetText())
-            self:GetParent():Hide()
+        EditBoxOnEnterPressed = function(frame)
+            self:SaveNewLabel(change_id, frame:GetText())
+            frame:GetParent():Hide()
         end,
-        EditBoxOnEscapePressed = function()
-            self:GetParent():Hide();
+        EditBoxOnEscapePressed = function(frame)
+            frame:GetParent():Hide();
         end,
         timeout = 0,
         whileDead = 1,
@@ -205,21 +205,21 @@ function HealOrganizer:OnInitialize() -- {{{
         text = L["SET_SAVEAS"],
         button1 = TEXT(SAVE),
         button2 = TEXT(CANCEL),
-        OnAccept = function()
+        OnAccept = function(frame)
             -- button gedrueckt, auf GetName/GetParent achten
-            self:SetSaveAs(getglobal(self:GetParent():GetName().."EditBox"):GetText())
+            self:SetSaveAs(_G[frame:GetParent():GetName().."EditBox"]:GetText())
         end,
-        OnHide = function()
-            getglobal(self:GetName().."EditBox"):SetText("")
+        OnHide = function(frame)
+            _G[self:GetName().."EditBox"]:SetText("")
         end,
-        OnShow = function()
+        OnShow = function(frame)
         end,
-	    EditBoxOnEnterPressed = function()
-            self:SetSaveAs(getglobal(self:GetParent():GetName().."EditBox"):GetText())
-            self:GetParent():Hide()
+        EditBoxOnEnterPressed = function(frame)
+            self:SetSaveAs(_G[frame:GetParent():GetName().."EditBox"]:GetText())
+            frame:GetParent():Hide()
         end,
-        EditBoxOnEscapePressed = function()
-            self:GetParent():Hide();
+        EditBoxOnEscapePressed = function(frame)
+            frame:GetParent():Hide();
         end,
         timeout = 0,
         whileDead = 1,
@@ -236,7 +236,6 @@ function HealOrganizer:OnInitialize() -- {{{
     self:Debug( "2" .. type( HealOrganizerDialogEinteilung ) );
     self:Debug( "2" .. type( HealOrganizerDialogEinteilungTitle ) );
     HealOrganizerDialogEinteilungTitle:SetText(L["ARRANGEMENT"])
-self:Debug( "d4" );
     for i=1, 20 do
         getglobal("HealOrganizerDialogEinteilungHealerpoolSlot"..i.."Label"):SetText(L["FREE"])
     end
@@ -735,25 +734,25 @@ function HealOrganizer:ChangeChan() -- {{{
     self.db.profile.chan = HealOrganizerDialogBroadcastChannelEditbox:GetText()
 end -- }}}
 
-function HealOrganizer:HealerOnClick(a) -- {{{
+function HealOrganizer:HealerOnClick(frame, a) -- {{{
     self:Debug("HealerOnClick: click")
     self:Debug("HealerOnClick: value " .. a)
 end -- }}}
 
-function HealOrganizer:HealerOnDragStart() -- {{{
+function HealOrganizer:HealerOnDragStart(frame) -- {{{
     self:Debug("Healer OnDragStart")
     local cursorX, cursorY = GetCursorPosition()
-    self:ClearAllPoints();
+    frame:ClearAllPoints();
 
-    self:StartMoving()
-    level_of_button = self:GetFrameLevel();
-    self:SetFrameLevel(self:GetFrameLevel()+30) -- sehr hoch
+    frame:StartMoving()
+    level_of_button = frame:GetFrameLevel();
+    frame:SetFrameLevel(frame:GetFrameLevel()+30) -- sehr hoch
 end -- }}}
 
-function HealOrganizer:HealerOnDragStop() -- {{{
+function HealOrganizer:HealerOnDragStop(frame) -- {{{
     self:Debug("Healer OnDragStop")
-    self:SetFrameLevel(level_of_button)
-    self:StopMovingOrSizing()
+    frame:SetFrameLevel(level_of_button)
+    frame:StopMovingOrSizing()
 
     local pools = {
         "HealOrganizerDialogEinteilungHealerpool",
@@ -803,30 +802,30 @@ function HealOrganizer:HealerOnDragStop() -- {{{
             if (slot and group) then
                     self:Debug("Parent HealOrganizerDialogEinteilungHealGroup"..group.." und slot: "..slot)
             end
-            self:Debug("ich habe "..self:GetName())
-            self:Debug("vorher "..healer[self.username])
+            self:Debug("ich habe "..frame:GetName())
+            self:Debug("vorher "..healer[frame.username])
             -- den heiler da zuordnen
             if "HealOrganizerDialogEinteilungHealerpool" == pool then
-                healer[self.username] = "Rest"
-		position[self.username] = 0
+                healer[frame.username] = "Rest"
+                position[frame.username] = 0
             else
                 if group >= 1 and group <= self.CONST.NUM_GROUPS then
-                        lastAction["group"] = healer[self.username]
-                        healer[self.username] = group
+                        lastAction["group"] = healer[frame.username]
+                        healer[frame.username] = group
                 end
                 if slot >= 1 and slot <= self.CONST.NUM_SLOTS then
-                        lastAction["name"] = self.username
+                        lastAction["name"] = frame.username
                         --Nur setzen wenn innerhalb einer Gruppe verschoben wird, 0 = Kommt von ausserhalb und wird an der position eingefuegt und Gruppe nach unten verschoben
                         if lastAction["group"] == group then
-                                lastAction["position"] = position[self.username]
+                                lastAction["position"] = position[frame.username]
                         else
                                 lastAction["position"] = 0
                         end
                         --neue Position
-                        position[self.username] = slot
+                        position[frame.username] = slot
                 end
             end
-            self:Debug("nachher "..healer[self.username])
+            self:Debug("nachher "..healer[frame.username])
             break
         end
     end
@@ -834,13 +833,13 @@ function HealOrganizer:HealerOnDragStop() -- {{{
     self:UpdateDialogValues()
 end -- }}}
 
-function HealOrganizer:HealerOnLoad() -- {{{
+function HealOrganizer:HealerOnLoad(frame) -- {{{
    -- self:Debug("OnLoad")
     -- 0 = pool, MT1-M5
     -- 1 = slots
     -- 2 = passt ;)
-    self:SetFrameLevel(self:GetFrameLevel() + 2)
-    self:RegisterForDrag("LeftButton")
+    frame:SetFrameLevel(frame:GetFrameLevel() + 2)
+    frame:RegisterForDrag("LeftButton")
 end -- }}}
 
 function HealOrganizer:EditGroupLabel(group) -- {{{
@@ -1087,15 +1086,15 @@ function HealOrganizer:CHAT_MSG_WHISPER( ... ) -- {{{
     end
 end -- }}}
 
-function HealOrganizer:OnMouseWheel(richtung) -- {{{
-    if not self then
+function HealOrganizer:OnMouseWheel(frame, richtung) -- {{{
+    if not frame then
         return
     end
     self:Debug("Mausrad:")
-    self:Debug(self)
-    self:Debug(self and self:GetName())
+    self:Debug(frame)
+    self:Debug(frame and frame:GetName())
     self:Debug(richtung)
-    local _,_,group,slot = string.find(self:GetName(), "HealOrganizerDialogEinteilungHealGroup(%d+)Slot(%d+)")
+    local _,_,group,slot = string.find(frame:GetName(), "HealOrganizerDialogEinteilungHealGroup(%d+)Slot(%d+)")
     group,slot = tonumber(group),tonumber(slot)
     if not group or not slot then
         self:Debug("kein match o_O")
