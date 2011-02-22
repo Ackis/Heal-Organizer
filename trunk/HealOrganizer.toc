@@ -1,4 +1,4 @@
-## Interface: 30300
+## Interface: 40000
 ## Title: Heal Organizer 2.3
 ## Notes: Organize the healer in a raid
 ## Notes-deDE: Verwaltet die Heilerzuteilung in einem Schlachtzug

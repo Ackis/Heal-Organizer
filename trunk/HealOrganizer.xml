@@ -28,16 +28,16 @@
         </Layers>
         <Scripts>
             <OnLoad>
-                HealOrganizer:HealerOnLoad()
+                HealOrganizer:HealerOnLoad(self)
             </OnLoad>
             <OnClick>
-                HealOrganizer:HealerOnClick(arg1)
+                HealOrganizer:HealerOnClick(self, button)
             </OnClick>
             <OnDragStart>
-                HealOrganizer:HealerOnDragStart()
+                HealOrganizer:HealerOnDragStart(self)
             </OnDragStart>
             <OnDragStop>
-                HealOrganizer:HealerOnDragStop()
+                HealOrganizer:HealerOnDragStop(self)
             </OnDragStop>
         </Scripts>
     </Button>
@@ -69,7 +69,7 @@
         </Layers>
         <Scripts>
             <OnMouseWheel>
-                HealOrganizer:OnMouseWheel(arg1)
+                HealOrganizer:OnMouseWheel(self, delta)
             </OnMouseWheel>
         </Scripts>
     </Frame>
@@ -307,16 +307,16 @@
         </Layers>
         <Scripts>
             <OnLoad>
-                table.insert(UISpecialFrames,this:GetName());
+                table.insert(UISpecialFrames, self:GetName());
             </OnLoad>
             <OnMouseDown>
-                this:StartMoving(); 
+                self:StartMoving(); 
             </OnMouseDown>
             <OnMouseUp> 
-                this:StopMovingOrSizing();
+                self:StopMovingOrSizing();
             </OnMouseUp>
             <OnDragStop>
-                this:StopMovingOrSizing();
+                self:StopMovingOrSizing();
             </OnDragStop>
         </Scripts>
         <Frames>
