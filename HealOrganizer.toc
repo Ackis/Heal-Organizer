@@ -1,6 +1,33 @@
-## Title: Heal Organizer
-## Notes: Organize the healer in a raid
-## Notes-deDE: Verwaltet die Heilerzuteilung in einem Schlachtzug
+#@non-debug@
+## Title: @localization(locale="enUS", key="Title", namespace="ToC")@
+## Title-frFR: @localization(locale="frFR", key="Title", namespace="ToC")@
+## Title-deDE: @localization(locale="deDE", key="Title", namespace="ToC")@
+## Title-koKR: @localization(locale="koKR", key="Title", namespace="ToC")@
+## Title-esMX: @localization(locale="esMX", key="Title", namespace="ToC")@
+## Title-ruRU: @localization(locale="ruRU", key="Title", namespace="ToC")@
+## Title-zhCN: @localization(locale="zhCN", key="Title", namespace="ToC")@
+## Title-esES: @localization(locale="esES", key="Title", namespace="ToC")@
+## Title-zhTW: @localization(locale="zhTW", key="Title", namespace="ToC")@
+#@end-non-debug@
+#@debug@
+## Title: Heal Organizer - Development Version
+#@end-debug@
+
+#@non-debug@
+## Notes: @localization(locale="enUS", key="Description", namespace="ToC")@
+## Notes-frFR: @localization(locale="frFR", key="Description", namespace="ToC")@
+## Notes-deDE: @localization(locale="deDE", key="Description", namespace="ToC")@
+## Notes-koKR: @localization(locale="koKR", key="Description", namespace="ToC")@
+## Notes-esMX: @localization(locale="esMX", key="Description", namespace="ToC")@
+## Notes-ruRU: @localization(locale="ruRU", key="Description", namespace="ToC")@
+## Notes-zhCN: @localization(locale="zhCN", key="Description", namespace="ToC")@
+## Notes-esES: @localization(locale="esES", key="Description", namespace="ToC")@
+## Notes-zhTW: @localization(locale="zhTW", key="Description", namespace="ToC")@
+#@end-non-debug@
+#@debug@
+## Notes: Latest alpha version of Heal Organizer
+#@end-debug@
+
 ## Author: Ackis, Progman, Raegx, nevcairiel
 
 ## Interface: 40000
