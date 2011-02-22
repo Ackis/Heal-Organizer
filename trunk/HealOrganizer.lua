@@ -1074,11 +1074,11 @@ function HealOrganizer:CHAT_MSG_WHISPER( ... ) -- {{{
             -- labels holen
             local text = grouplabels[healer[user]]
             if text == L["REMAINS"] then
-            	text = HealOrganizerDialogEinteilungRestAction:GetText()
-    			if text == "" then
-        			text = L["FFA"]
-    			end
-    		end
+                text = HealOrganizerDialogEinteilungRestAction:GetText()
+                if text == "" then
+                    text = L["FFA"]
+                end
+            end
             reply = string.format(L["REPLY_ARRANGEMENT_FOR"], self:ReplaceTokens(text))
         end
         self:Debug("Sende Spieler %s den Text %q", user, reply)
@@ -1108,16 +1108,10 @@ function HealOrganizer:OnMouseWheel(frame, richtung) -- {{{
         self:Debug("out of index...")
         return
     end
-    local classdirection
-    local faction = UnitFactionGroup("player")
-    if faction == "Alliance" then
-        classdirection = {"EMPTY", "PRIEST", "DRUID", "PALADIN"}
-    else
-        classdirection = {"EMPTY", "PRIEST", "DRUID", "SHAMAN"}
-    end
+    local classdirection = {"EMPTY", "PRIEST", "DRUID", "PALADIN", "SHAMAN"}
     -- position im array suchen
     local pos = 1
-    while (pos <= 4) do
+    while (pos <= #classdirection) do
         -- nil abfangen
         if groupclasses[group][slot] then
             if classdirection[pos] == groupclasses[group][slot] then
@@ -1134,10 +1128,10 @@ function HealOrganizer:OnMouseWheel(frame, richtung) -- {{{
     self:Debug("Label ist "..classdirection[pos])
     -- modulo, % klappte bei mir local nicht o_O
     pos = pos - richtung -- nach unten: PRIEST -> DRUID -> PALADIN -> nil -> PRIEST
-    if 0 == pos then
-        pos = 4
+    if pos == 0 then
+        pos = #classdirection
     end
-    if 5 == pos then
+    if pos > #classdirection then
         pos = 1
     end
     self:Debug("Neuer label ist "..classdirection[pos])
