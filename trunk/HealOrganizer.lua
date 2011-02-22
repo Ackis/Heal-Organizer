@@ -658,7 +658,7 @@ function HealOrganizer:BroadcastChan() --{{{
     local id, name = GetChannelName(self.db.profile.chan)
     if id == 0 then
         -- nein, nicht drin
-        self:Print(L["NO_CHANNEL"], self.db.profile.chan)
+        self:Print(format(L["NO_CHANNEL"], self.db.profile.chan))
         return;
     end
     local messages = self:BuildMessages()
