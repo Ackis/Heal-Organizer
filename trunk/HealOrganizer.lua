@@ -210,7 +210,7 @@ function HealOrganizer:OnInitialize() -- {{{
             self:SetSaveAs(_G[frame:GetParent():GetName().."EditBox"]:GetText())
         end,
         OnHide = function(frame)
-            _G[self:GetName().."EditBox"]:SetText("")
+            _G[frame:GetName().."EditBox"]:SetText("")
         end,
         OnShow = function(frame)
         end,
