@@ -207,7 +207,7 @@ function HealOrganizer:OnInitialize() -- {{{
         button2 = TEXT(CANCEL),
         OnAccept = function(frame)
             -- button gedrueckt, auf GetName/GetParent achten
-            self:SetSaveAs(_G[frame:GetParent():GetName().."EditBox"]:GetText())
+            self:SetSaveAs(_G[frame:GetName().."EditBox"]:GetText())
         end,
         OnHide = function(frame)
             _G[frame:GetName().."EditBox"]:SetText("")
@@ -215,7 +215,7 @@ function HealOrganizer:OnInitialize() -- {{{
         OnShow = function(frame)
         end,
         EditBoxOnEnterPressed = function(frame)
-            self:SetSaveAs(_G[frame:GetParent():GetName().."EditBox"]:GetText())
+            self:SetSaveAs(frame:GetText())
             frame:GetParent():Hide()
         end,
         EditBoxOnEscapePressed = function(frame)
