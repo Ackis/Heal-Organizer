@@ -242,8 +242,7 @@ function HealOrganizer:OnInitialize() -- {{{
         _G["HealOrganizerDialogEinteilungHealerpoolSlot"..i.."Label"]:SetText(L["FREE"])
     end
     
-    HealOrganizerDialogEinteilungOptionenTitle:SetText(L["OPTIONS"])
-    HealOrganizerDialogEinteilungOptionenAutofill:SetText(L["AUTOFILL"])
+    HealOrganizerDialogEinteilungAutofill:SetText(L["AUTOFILL"])
     HealOrganizerDialogEinteilungStatsTitle:SetText(L["STATS"])
     HealOrganizerDialogEinteilungStatsPriests:SetText(L["PRIESTS"]..": "..5)
     HealOrganizerDialogEinteilungStatsPriests:SetTextColor(RAID_CLASS_COLORS["PRIEST"].r,
