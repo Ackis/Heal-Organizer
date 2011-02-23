@@ -321,7 +321,7 @@
         <Frames>
             <Frame name="$parentEinteilung" inherits="OptionsBoxTemplate"> <!-- {{{ -->
                 <Size> 
-                    <AbsDimension x="460" y="415"/> 
+                    <AbsDimension x="460" y="410"/> 
                 </Size>
                 <Anchors> 
                     <Anchor point="TOP">
@@ -335,7 +335,7 @@
                         <FontString name="$parentRest" inherits="GameFontHighlightSmall" text="REST_LOCALE">
                             <Anchors>
                                 <Anchor point="BOTTOMLEFT">
-                                    <Offset x="10" y="115"/>
+                                    <Offset x="10" y="110"/>
                                 </Anchor>
                             </Anchors>
                         </FontString>
@@ -653,7 +653,7 @@
                 <Anchors> 
                     <Anchor point="TOP" relativeTo="$parentEinteilung" relativePoint="BOTTOM">
                         <Offset>
-                            <AbsDimension x="0" y="-10"/>
+                            <AbsDimension x="0" y="-15"/>
                         </Offset>
                     </Anchor>
                 </Anchors>
