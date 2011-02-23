@@ -658,7 +658,7 @@ function HealOrganizer:BroadcastChan() --{{{
     local id, name = GetChannelName(self.db.profile.chan)
     if id == 0 then
         -- nein, nicht drin
-        self:Print(format(L["NO_CHANNEL"], self.db.profile.chan))
+        self:ErrorMessage(format(L["NO_CHANNEL"], self.db.profile.chan))
         return;
     end
     local messages = self:BuildMessages()
@@ -672,7 +672,7 @@ end -- }}}
 function HealOrganizer:BroadcastRaid() -- {{{
     self:Debug("BroadcastRaid: broadcasting...")
     if GetNumRaidMembers() == 0 then
-        self:CustomPrint(1, 0.2, 0.2, self.printFrame, nil, " ", L["NOT_IN_RAID"])
+        self:ErrorMessage(L["NOT_IN_RAID"])
         return;
     end
     local messages = self:BuildMessages()
@@ -986,7 +986,7 @@ function HealOrganizer:ErrorMessage(str) -- {{{
     if str == "" then
         return
     end
-    self:CustomPrint(1, 0.2, 0.2, self.printFrame, nil, " ", str)
+    self:Print(format("|cffff3333%s|r", str))
 end -- }}}
 
 function HealOrganizer:BuildUnitIDs() -- {{{
