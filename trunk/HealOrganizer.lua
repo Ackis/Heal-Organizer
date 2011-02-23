@@ -1,6 +1,8 @@
 HealOrganizer = LibStub("AceAddon-3.0"):NewAddon("HealOrganizer", "AceConsole-3.0", "AceEvent-3.0");
 local L = LibStub("AceLocale-3.0"):GetLocale("HealOrganizer", true);
 
+local _G = _G
+
 local HO_SLASH_COMMANDS = {
     type = 'group',
     args = {
@@ -237,7 +239,7 @@ function HealOrganizer:OnInitialize() -- {{{
     self:Debug( "2" .. type( HealOrganizerDialogEinteilungTitle ) );
     HealOrganizerDialogEinteilungTitle:SetText(L["ARRANGEMENT"])
     for i=1, 20 do
-        getglobal("HealOrganizerDialogEinteilungHealerpoolSlot"..i.."Label"):SetText(L["FREE"])
+        _G["HealOrganizerDialogEinteilungHealerpoolSlot"..i.."Label"]:SetText(L["FREE"])
     end
     
     HealOrganizerDialogEinteilungOptionenTitle:SetText(L["OPTIONS"])
@@ -500,8 +502,8 @@ function HealOrganizer:UpdateDialogValues() -- {{{
     -- slot-lables aktuallisieren {{{
     for j=1, self.CONST.NUM_GROUPS do
         for i=1, self.CONST.NUM_SLOTS do
-            local slotlabel = getglobal("HealOrganizerDialogEinteilungHealGroup"..j.."Slot"..i.."Label")
-            local slotbutton = getglobal("HealOrganizerDialogEinteilungHealGroup"..j.."Slot"..i.."Color")
+            local slotlabel = _G["HealOrganizerDialogEinteilungHealGroup"..j.."Slot"..i.."Label"]
+            local slotbutton = _G["HealOrganizerDialogEinteilungHealGroup"..j.."Slot"..i.."Color"]
             slotlabel:SetText(self:GetLabelByClass(groupclasses[j][i]))
             local color = RAID_CLASS_COLORS[groupclasses[j][i]];
             if color then
@@ -515,7 +517,7 @@ function HealOrganizer:UpdateDialogValues() -- {{{
     -- {{{ gruppen-labels aktuallisieren
     HealOrganizerDialogEinteilungHealerpoolLabel:SetText(grouplabels["Rest"])
     for i=1,self.CONST.NUM_GROUPS do
-        getglobal("HealOrganizerDialogEinteilungHealGroup"..i.."Label"):SetText(self:ReplaceTokens(grouplabels[i]))
+        _G["HealOrganizerDialogEinteilungHealGroup"..i.."Label"]:SetText(self:ReplaceTokens(grouplabels[i]))
     end
     -- }}}
     -- gruppen-klassen aktuallisieren {{{
@@ -528,20 +530,20 @@ function HealOrganizer:UpdateDialogValues() -- {{{
     -- einteilungen aktuallisieren -- {{{
     -- alle buttons verstecken
     for i=1, 20 do
-        getglobal("HealOrganizerDialogButton"..i):ClearAllPoints()
-        getglobal("HealOrganizerDialogButton"..i):Hide()
+        _G["HealOrganizerDialogButton"..i]:ClearAllPoints()
+        _G["HealOrganizerDialogButton"..i]:Hide()
     end
     local zaehler = 1
     -- Rest {{{
-    for i=1, table.getn(healingAssignment.Rest) do
+    for i=1, #healingAssignment.Rest do
         -- max 20 durchläufe
         if zaehler > 20 then
             -- zu viel, abbrechen
             break
         end
-        local button = getglobal("HealOrganizerDialogButton"..zaehler)
-        local buttonlabel = getglobal(button:GetName().."Label")
-        local buttoncolor = getglobal(button:GetName().."Color")
+        local button = _G["HealOrganizerDialogButton"..zaehler]
+        local buttonlabel = _G[button:GetName().."Label"]
+        local buttoncolor = _G[button:GetName().."Color"]
         -- habe den Button an sich, das Label und die Farbe, einstellen
         buttonlabel:SetText(healingAssignment.Rest[i])
         local class, engClass = UnitClass(self:GetUnitByName(healingAssignment.Rest[i]))
@@ -559,15 +561,15 @@ function HealOrganizer:UpdateDialogValues() -- {{{
     -- }}}
     -- MTs {{{
     for j=1, self.CONST.NUM_GROUPS do
-        for i=1, table.getn(healingAssignment[j]) do
+        for i=1, #healingAssignment[j] do
             -- max 20 durchläufe
             if zaehler > 20 then
                 -- zu viel, abbrechen
                 break
             end
-            local button = getglobal("HealOrganizerDialogButton"..zaehler)
-            local buttonlabel = getglobal(button:GetName().."Label")
-            local buttoncolor = getglobal(button:GetName().."Color")
+            local button = _G["HealOrganizerDialogButton"..zaehler]
+            local buttonlabel = _G[button:GetName().."Label"]
+            local buttoncolor = _G[button:GetName().."Color"]
             -- habe den Button an sich, das Label und die Farbe, einstellen
             buttonlabel:SetText(healingAssignment[j][i])
             local class, engClass = UnitClass(self:GetUnitByName(healingAssignment[j][i]))
@@ -688,7 +690,7 @@ function HealOrganizer:BuildMessages() -- {{{
     -- 1-5, rest
     -- {{{ gruppen
     for i=1, self.CONST.NUM_GROUPS do
-        local header = getglobal("HealOrganizerDialogEinteilungHealGroup"..i.."Label"):GetText()
+        local header = _G["HealOrganizerDialogEinteilungHealGroup"..i.."Label"]:GetText()
         if getn(healingAssignment[i]) ~= 0 then
             local names={}
             for _, name in pairs(healingAssignment[i]) do
@@ -696,7 +698,7 @@ function HealOrganizer:BuildMessages() -- {{{
                     table.insert(names, name)
                 end
             end
-            table.insert(messages, getglobal("HealOrganizerDialogEinteilungHealGroup"..i.."Label"):GetText()..": "..table.concat(names, ", "))
+            table.insert(messages, _G["HealOrganizerDialogEinteilungHealGroup"..i.."Label"]:GetText()..": "..table.concat(names, ", "))
         end
     end
     -- }}}
@@ -716,7 +718,7 @@ function HealOrganizer:SendToHealers() -- {{{
     local whisper = HealOrganizerDialogBroadcastWhisper:GetChecked()
     if whisper then
         for i=1, self.CONST.NUM_GROUPS do
-            local header = getglobal("HealOrganizerDialogEinteilungHealGroup"..i.."Label"):GetText()
+            local header = _G["HealOrganizerDialogEinteilungHealGroup"..i.."Label"]:GetText()
             if getn(healingAssignment[i]) ~= 0 then
                 for _, name in pairs(healingAssignment[i]) do
                     if UnitExists(self:GetUnitByName(name)) then
@@ -794,7 +796,7 @@ function HealOrganizer:HealerOnDragStop(frame) -- {{{
         "HealOrganizerDialogEinteilungHealGroup9Slot4",
     }
     for _, pool in pairs(pools) do
-        poolframe = getglobal(pool)
+        poolframe = _G[pool]
         if MouseIsOver(poolframe) then
             self:Debug("Bin ueber "..poolframe:GetName())
             local _,_,group,slot = string.find(poolframe:GetName(), "HealOrganizerDialogEinteilungHealGroup(%d+)Slot(%d+)")
