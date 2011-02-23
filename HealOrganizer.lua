@@ -10,18 +10,18 @@ local HO_SLASH_COMMANDS = {
             desc = L["SHOW_DIALOG"],
             func = function() HealOrganizer:Dialog() end,
         },
-		raid = {
-			type = 'execute',
-			name = 'Broadcast Raid',
-			desc = L["BROADCAST_RAID"],
-			func = function() HealOrganizer:BroadcastRaid() end,
-		},
-		chan = {
-			type = 'execute',
-			name = 'Broadcast Channel',
-			desc = L["BROADCAST_CHAN"],
-			func = function() HealOrganizer:BroadcastChan() end,
-		},
+        raid = {
+            type = 'execute',
+            name = 'Broadcast Raid',
+            desc = L["BROADCAST_RAID"],
+            func = function() HealOrganizer:BroadcastRaid() end,
+        },
+        chan = {
+            type = 'execute',
+            name = 'Broadcast Channel',
+            desc = L["BROADCAST_CHAN"],
+            func = function() HealOrganizer:BroadcastChan() end,
+        },
         autosort = {
             type = 'toggle',
             name = 'Autosort',
@@ -153,15 +153,15 @@ HealOrganizer.CONST.NUM_SLOTS = 4
 
 
 function HealOrganizer:Debug( msg )
-	--self:Print( msg);
+    --self:Print( msg);
 end;
 
 function HealOrganizer:OnInitialize() -- {{{
     -- Called when the addon is loaded
     LibStub("AceConfig-3.0"):RegisterOptionsTable("HealOrganizer", HO_SLASH_COMMANDS, {"healorganizer", "hlorg","ho"})
-	self:Debug( "Init: " .. type(self.db) );    
-	
-	self.db = LibStub("AceDB-3.0"):New("HealOrganizerDB", HO_DB_DEFAULTS );
+    self:Debug( "Init: " .. type(self.db) );    
+    
+    self.db = LibStub("AceDB-3.0"):New("HealOrganizerDB", HO_DB_DEFAULTS );
     
     self:Debug( "Init: " .. type(self.db) );    
     
@@ -410,7 +410,7 @@ function HealOrganizer:RefreshTables() --{{{
                     return a<b
             end
             return true
-	else 
+    else 
             if (position[a] and position[b]) then
                 self:Debug("sorting: ("..a..")"..position[a].." < ("..b..")"..position[b])
                 if position[a] == position[b] and lastAction["position"] then
@@ -587,7 +587,7 @@ function HealOrganizer:UpdateDialogValues() -- {{{
     -- }}}
     -- {{{ Sets aktuallisieren 
     local function HealOrganizer_changeSet( frame )
-    	local set = frame:GetText();
+        local set = frame:GetText();
         self:Debug("HealOrganizer_changeSet: change set to "..set)
         UIDropDownMenu_SetSelectedValue(HealOrganizerDialogEinteilungSetsDropDown, set, set)
         -- healer temp save
@@ -600,32 +600,32 @@ function HealOrganizer:UpdateDialogValues() -- {{{
         self:UpdateDialogValues()
     end
 
-	local function HealOrganizerDropDown_Initialize() 
+    local function HealOrganizerDropDown_Initialize() 
 
-	       local selectedValue = UIDropDownMenu_GetSelectedValue(HealOrganizerDialogEinteilungSetsDropDown)  
-	       local info
+           local selectedValue = UIDropDownMenu_GetSelectedValue(HealOrganizerDialogEinteilungSetsDropDown)  
+           local info
 
 
 
-	       local sorted
-	       sorted = {}
-	       for n in pairs(self.db.profile.sets) do table.insert(sorted, n) end 
-	       table.sort(sorted) 
-	       -- aus DB fuellen
-	       for key, value in ipairs(sorted) do
-	           info = {}
-	           info.text = value
-	           info.value = value
-	           info.func = HealOrganizer_changeSet
-	           info.arg1 = value
-	           self:Debug("DropDown_Initialize: value "..info.value)
-	           self:Debug("DropDown_Initialize: selectedValue: " .. selectedValue)
-	           if ( info.value == selectedValue ) then 
-	               info.checked = 1; 
-	           end
-	           UIDropDownMenu_AddButton(info);
-	       end
-	end
+           local sorted
+           sorted = {}
+           for n in pairs(self.db.profile.sets) do table.insert(sorted, n) end 
+           table.sort(sorted) 
+           -- aus DB fuellen
+           for key, value in ipairs(sorted) do
+               info = {}
+               info.text = value
+               info.value = value
+               info.func = HealOrganizer_changeSet
+               info.arg1 = value
+               self:Debug("DropDown_Initialize: value "..info.value)
+               self:Debug("DropDown_Initialize: selectedValue: " .. selectedValue)
+               if ( info.value == selectedValue ) then 
+                   info.checked = 1; 
+               end
+               UIDropDownMenu_AddButton(info);
+           end
+    end
     -- }}} 
     -- dropdown initialisieren
     UIDropDownMenu_Initialize(HealOrganizerDialogEinteilungSetsDropDown, HealOrganizerDropDown_Initialize); 
@@ -800,7 +800,7 @@ function HealOrganizer:HealerOnDragStop(frame) -- {{{
             local _,_,group,slot = string.find(poolframe:GetName(), "HealOrganizerDialogEinteilungHealGroup(%d+)Slot(%d+)")
             group,slot = tonumber(group),tonumber(slot)
             if (slot and group) then
-                    self:Debug("Parent HealOrganizerDialogEinteilungHealGroup"..group.." und slot: "..slot)
+                self:Debug("Parent HealOrganizerDialogEinteilungHealGroup"..group.." und slot: "..slot)
             end
             self:Debug("ich habe "..frame:GetName())
             self:Debug("vorher "..healer[frame.username])
@@ -810,19 +810,19 @@ function HealOrganizer:HealerOnDragStop(frame) -- {{{
                 position[frame.username] = 0
             else
                 if group >= 1 and group <= self.CONST.NUM_GROUPS then
-                        lastAction["group"] = healer[frame.username]
-                        healer[frame.username] = group
+                    lastAction["group"] = healer[frame.username]
+                    healer[frame.username] = group
                 end
                 if slot >= 1 and slot <= self.CONST.NUM_SLOTS then
-                        lastAction["name"] = frame.username
-                        --Nur setzen wenn innerhalb einer Gruppe verschoben wird, 0 = Kommt von ausserhalb und wird an der position eingefuegt und Gruppe nach unten verschoben
-                        if lastAction["group"] == group then
-                                lastAction["position"] = position[frame.username]
-                        else
-                                lastAction["position"] = 0
-                        end
-                        --neue Position
-                        position[frame.username] = slot
+                    lastAction["name"] = frame.username
+                    --Nur setzen wenn innerhalb einer Gruppe verschoben wird, 0 = Kommt von ausserhalb und wird an der position eingefuegt und Gruppe nach unten verschoben
+                    if lastAction["group"] == group then
+                        lastAction["position"] = position[frame.username]
+                    else
+                        lastAction["position"] = 0
+                    end
+                    --neue Position
+                    position[frame.username] = slot
                 end
             end
             self:Debug("nachher "..healer[frame.username])
@@ -1032,20 +1032,20 @@ function HealOrganizer:ReplaceTokens(str) -- {{{
         local s = L["MT"]..i
         if CT_RATarget then
             self:Debug("CTRAID found, i="..i)
-            if CT_RATarget.MainTanks[i] and
-                UnitExists("raid"..CT_RATarget.MainTanks[i][1]) and
-                UnitName("raid"..CT_RATarget.MainTanks[i][1]) == CT_RATarget.MainTanks[i][2]
-                then
+            if CT_RATarget.MainTanks[i] 
+               and UnitExists("raid"..CT_RATarget.MainTanks[i][1])
+               and UnitName("raid"..CT_RATarget.MainTanks[i][1]) == CT_RATarget.MainTanks[i][2]
+            then
                 -- MTi vorhanden
                 self:Debug("MT"..i.." vorhanden")
                 s = s.."("..CT_RATarget.MainTanks[i][2]..")"      
             end
         elseif oRA and oRA.maintanktable then
             --self:Debug("oRA MT found, i="..i)
-            if oRA.maintanktable[i] and
-                UnitExists(self:GetUnitByName(oRA.maintanktable[i])) and
-                UnitName(self:GetUnitByName(oRA.maintanktable[i])) == oRA.maintanktable[i]
-                then
+            if oRA.maintanktable[i]
+               and UnitExists(self:GetUnitByName(oRA.maintanktable[i]))
+               and UnitName(self:GetUnitByName(oRA.maintanktable[i])) == oRA.maintanktable[i]
+            then
                 self:Debug("oRA MT"..i.." vorhanden")
                 s = s.."("..oRA.maintanktable[i]..")"
             end
@@ -1060,8 +1060,8 @@ function HealOrganizer:ReplaceTokens(str) -- {{{
 end -- }}}
 
 function HealOrganizer:CHAT_MSG_WHISPER( ... ) -- {{{
-	local msg = select(2, ...);
-	local user = select(3, ...);
+    local msg = select(2, ...);
+    local user = select(3, ...);
     if GetNumRaidMembers() == 0 then
         -- bin nicht im raid, also auch keine zuteilung
         return
@@ -1194,41 +1194,41 @@ end -- }}}
 
 
 HO_DB_DEFAULTS = 
-{	profile = 
-	{
-	    sets = 
-	    {
-	        [L["SET_DEFAULT"]] = 
-	        {
-	            Name = L["SET_DEFAULT"],
-	            Beschriftungen = 
-	            {
-	                [1] = "%MT1%",
-	                [2] = "%MT2%",
-	                [3] = "%MT3%",
-	                [4] = "%MT4%",
-	                [5] = "%MT5%",
-	                [6] = "%MT6%",
-	                [7] = "%MT7%",
-	                [8] = "%MT8%",
-	                [9] = L["DISPEL"],
-	            },
-	            Restaktion = "ffa",
-	            Klassengruppen = 
-	            {
-	                [1] = {},
-	                [2] = {},
-	                [3] = {},
-	                [4] = {},
-	                [5] = {},
-	                [6] = {},
-	                [7] = {},
-	                [8] = {},
-	                [9] = {},
-	            }
-	        }
-	    },
-		chan = "",
-		autosort = true
-	}
+{    profile = 
+    {
+        sets = 
+        {
+            [L["SET_DEFAULT"]] = 
+            {
+                Name = L["SET_DEFAULT"],
+                Beschriftungen = 
+                {
+                    [1] = "%MT1%",
+                    [2] = "%MT2%",
+                    [3] = "%MT3%",
+                    [4] = "%MT4%",
+                    [5] = "%MT5%",
+                    [6] = "%MT6%",
+                    [7] = "%MT7%",
+                    [8] = "%MT8%",
+                    [9] = L["DISPEL"],
+                },
+                Restaktion = "ffa",
+                Klassengruppen = 
+                {
+                    [1] = {},
+                    [2] = {},
+                    [3] = {},
+                    [4] = {},
+                    [5] = {},
+                    [6] = {},
+                    [7] = {},
+                    [8] = {},
+                    [9] = {},
+                }
+            }
+        },
+        chan = "",
+        autosort = true
+    }
 }
