@@ -261,7 +261,7 @@
             clampedToScreen="true"
             parent="UIParent">
         <Size>
-            <AbsDimension x="480" y="600" />
+            <AbsDimension x="480" y="575" />
         </Size>
         <Anchors>
             <Anchor point="CENTER" />
@@ -321,7 +321,7 @@
         <Frames>
             <Frame name="$parentEinteilung" inherits="OptionsBoxTemplate"> <!-- {{{ -->
                 <Size> 
-                    <AbsDimension x="460" y="450"/> 
+                    <AbsDimension x="460" y="415"/> 
                 </Size>
                 <Anchors> 
                     <Anchor point="TOP">
@@ -335,7 +335,7 @@
                         <FontString name="$parentRest" inherits="GameFontHighlightSmall" text="REST_LOCALE">
                             <Anchors>
                                 <Anchor point="BOTTOMLEFT">
-                                    <Offset x="10" y="145"/>
+                                    <Offset x="10" y="115"/>
                                 </Anchor>
                             </Anchors>
                         </FontString>
@@ -434,41 +434,14 @@
                         </Anchors>
                     </Frame>
                     <!-- }}} -->
-                    <Frame name="$parentOptionen" inherits="OptionsBoxTemplate"> <!-- {{{ -->
-                        <Size>
-                            <AbsDimension x="160" y="70" />
-                        </Size>
-                        <Anchors>
-                            <Anchor point="TOPLEFT" relativeTo="$parentHealGroup7" relativePoint="BOTTOMLEFT">
-                                <Offset>
-                                    <AbsDimension x="0" y="-20"/>
-                                </Offset>
-                            </Anchor>
-                        </Anchors>
-                        <Frames>
-                            <Button name="$parentAutofill" inherits="UIPanelButtonTemplate" text="AUTOFILL_LOCALE">
-                                <Size x="100" y="24"/>
-                                <Anchors>
-                                    <Anchor point="TOPLEFT">
-                                        <Offset x="10" y="-10"/>
-                                    </Anchor>
-                                </Anchors>
-                                <Scripts>
-                                    <OnClick>
-                                        HealOrganizer:AutoFill()
-                                    </OnClick>
-                                </Scripts>
-                            </Button>
-                        </Frames>
-                    </Frame> <!-- }}} -->
                     <Frame name="$parentStats" inherits="OptionsBoxTemplate"> <!-- {{{ -->
                         <Size>
-                            <AbsDimension x="150" y="95" />
+                            <AbsDimension x="100" y="95" />
                         </Size>
                         <Anchors>
-                            <Anchor point="TOPLEFT" relativeTo="$parentOptionen" relativePoint="TOPRIGHT">
+                            <Anchor point="TOPRIGHT" relativeTo="$parentHealGroup9" relativePoint="BOTTOMRIGHT">
                                 <Offset>
-                                    <AbsDimension x="10" y="0"/>
+                                    <AbsDimension x="0" y="-20"/>
                                 </Offset>
                             </Anchor>
                         </Anchors>
@@ -515,7 +488,7 @@
                     </Frame> <!-- }}} -->
                     <EditBox name="$parentRestAction" letters="35" autoFocus="false">
                         <Size>
-                            <AbsDimension x="250" y="32"/>
+                            <AbsDimension x="145" y="32"/>
                         </Size>
                         <Anchors>
                             <Anchor point="TOPLEFT" relativeTo="$parentRest" relativePoint="BOTTOMLEFT">
@@ -528,17 +501,17 @@
                             <Layer level="BACKGROUND">
                                     <Texture file="Interface\ChatFrame\UI-ChatInputBorder-Left">
                                             <Size>
-                                                    <AbsDimension x="155" y="32"/>
+                                                    <AbsDimension x="100" y="32"/>
                                             </Size>
                                             <Anchors>
                                                 <Anchor point="LEFT">
-                                                    <Offset x="-5" y="0"/>
+                                                    <Offset x="-7" y="0"/>
                                                 </Anchor>
                                             </Anchors>
                                     </Texture>
                                     <Texture file="Interface\ChatFrame\UI-ChatInputBorder-Right">
                                             <Size>
-                                                    <AbsDimension x="150" y="32"/>
+                                                    <AbsDimension x="100" y="32"/>
                                             </Size>
                                             <Anchors>
                                                     <Anchor point="RIGHT"/>
@@ -555,6 +528,19 @@
                             </OnEscapePressed>
                         </Scripts>
                     </EditBox>
+                    <Button name="$parentAutofill" inherits="UIPanelButtonTemplate" text="AUTOFILL_LOCALE">
+                        <Size x="100" y="24"/>
+                        <Anchors>
+                            <Anchor point="TOPLEFT" relativeTo="$parentRestAction" relativePoint="TOPRIGHT">
+                                <Offset x="5" y="-4"/>
+                            </Anchor>
+                        </Anchors>
+                        <Scripts>
+                            <OnClick>
+                                HealOrganizer:AutoFill()
+                            </OnClick>
+                        </Scripts>
+                    </Button>
                     <Frame name="$parentSets" inherits="OptionsBoxTemplate"> <!-- {{{ -->
                         <Anchors>
                             <Anchor point="LEFT" relativeTo="$parent" relativePoint="LEFT">
@@ -576,21 +562,21 @@
                         <Frames>
                             <Frame name="$parentDropDown" inherits="UIDropDownMenuTemplate">
                                 <Anchors>
-                                    <Anchor point="BOTTOMLEFT" relativeTo="$parent" relativePoint="BOTTOMLEFT">
+                                    <Anchor point="TOPLEFT" relativeTo="$parent" relativePoint="TOPLEFT">
                                         <Offset>
-                                            <AbsDimension x="0" y="10" />
+                                            <AbsDimension x="-6" y="-10" />
                                         </Offset>
                                     </Anchor>
                                 </Anchors>
                             </Frame>
                             <Button name="$parentSave" inherits="UIPanelButtonTemplate" text="SAVE_LOCALE">
                                 <Size>
-                                    <AbsDimension x="100" y="24"/>
+                                    <AbsDimension x="80" y="24"/>
                                 </Size>
                                 <Anchors>
-                                    <Anchor point="TOPLEFT" relativeTo="$parent" relativePoint="TOPLEFT">
+                                    <Anchor point="TOPLEFT" relativeTo="$parentDropDown" relativePoint="TOPRIGHT">
                                         <Offset>
-                                            <AbsDimension x="10" y="-10"/>
+                                            <AbsDimension x="-10" y="0"/>
                                         </Offset>
                                     </Anchor>
                                 </Anchors>
@@ -602,12 +588,12 @@
                             </Button>
                             <Button name="$parentSaveAs" inherits="UIPanelButtonTemplate" text="SAVEAS_LOCALE">
                                 <Size>
-                                    <AbsDimension x="100" y="24"/>
+                                    <AbsDimension x="80" y="24"/>
                                 </Size>
                                 <Anchors>
                                     <Anchor point="TOPLEFT" relativeTo="$parentSave" relativePoint="TOPRIGHT">
                                         <Offset>
-                                            <AbsDimension x="10" y="0"/>
+                                            <AbsDimension x="4" y="0"/>
                                         </Offset>
                                     </Anchor>
                                 </Anchors>
@@ -619,12 +605,12 @@
                             </Button>
                             <Button name="$parentDelete" inherits="UIPanelButtonTemplate" text="DELETE_LOCALE">
                                 <Size>
-                                    <AbsDimension x="100" y="24"/>
+                                    <AbsDimension x="80" y="24"/>
                                 </Size>
                                 <Anchors>
                                     <Anchor point="TOPLEFT" relativeTo="$parentSaveAs" relativePoint="TOPRIGHT">
                                         <Offset>
-                                            <AbsDimension x="10" y="0"/>
+                                            <AbsDimension x="4" y="0"/>
                                         </Offset>
                                     </Anchor>
                                 </Anchors>
