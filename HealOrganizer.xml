@@ -88,10 +88,9 @@
         </Layers>
         <Frames>
             <Button name="$parentLabel" text="GROUP_LOCALE">
-
-				<NormalFont style="GameFontNormal"/>
-				<HighlightFont style="GameFontHighlight"/>
-				<DisabledFont style="GameFontDisable"/>
+                <NormalFont style="GameFontNormal"/>
+                <HighlightFont style="GameFontHighlight"/>
+                <DisabledFont style="GameFontDisable"/>
                 <Anchors>
                     <Anchor point="TOP">
                         <Offset>
@@ -281,28 +280,28 @@
         <Layers>
             <Layer level="ARTWORK">
                 <Texture name="$parentHeaderTexture" file="Interface\DialogFrame\UI-DialogBox-Header">
-	            <Size>
-		        <AbsDimension x="256" y="64"/>
-		    </Size>
-		    <Anchors>
-		        <Anchor point="TOP">
-			    <Offset>
-			        <AbsDimension x="0" y="12"/>
-			    </Offset>
-			</Anchor>
-		    </Anchors>
-		</Texture>
+                    <Size>
+                        <AbsDimension x="256" y="64"/>
+                    </Size>
+                    <Anchors>
+                        <Anchor point="TOP">
+                            <Offset>
+                                <AbsDimension x="0" y="12"/>
+                            </Offset>
+                        </Anchor>
+                    </Anchors>
+                </Texture>
                 <FontString name="$parentHeaderText"
                         inherits="GameFontNormal"
                         text="Heal Organizer">
-		    <Anchors>
-			<Anchor point="TOP" relativeTo="$parentHeaderTexture">
-		            <Offset>
-			        <AbsDimension x="0" y="-14"/>
-			    </Offset>
-			</Anchor>
+                    <Anchors>
+                        <Anchor point="TOP" relativeTo="$parentHeaderTexture">
+                            <Offset>
+                                <AbsDimension x="0" y="-14"/>
+                            </Offset>
+                        </Anchor>
                     </Anchors>
-		</FontString>
+                </FontString>
             </Layer>
         </Layers>
         <Scripts>
