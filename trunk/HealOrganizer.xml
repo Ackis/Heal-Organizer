@@ -113,7 +113,7 @@
     <!-- {{{ Template fuer pool, 20 slots  -->
     <Frame name="HealOrganizerDialogHealerpoolTemplate" inherits="HealOrganizerDialogGroupTemplate" virtual="true">
         <Size>
-            <AbsDimension x="100" y="261"/>
+            <AbsDimension x="100" y="313"/>
         </Size>
         <Frames>
             <!-- Slots {{{ -->
@@ -217,6 +217,27 @@
                     <Anchor point="TOPLEFT" relativeTo="$parentSlot19" relativePoint="BOTTOMLEFT" />
                 </Anchors>
             </Button>
+            <Button name="$parentSlot21" inherits="HealOrganizerDialogSlotTemplate">
+                <Anchors>
+                    <Anchor point="TOPLEFT" relativeTo="$parentSlot20" relativePoint="BOTTOMLEFT" />
+                </Anchors>
+            </Button>
+            <Button name="$parentSlot22" inherits="HealOrganizerDialogSlotTemplate">
+                <Anchors>
+                    <Anchor point="TOPLEFT" relativeTo="$parentSlot21" relativePoint="BOTTOMLEFT" />
+                </Anchors>
+            </Button>
+            <Button name="$parentSlot23" inherits="HealOrganizerDialogSlotTemplate">
+                <Anchors>
+                    <Anchor point="TOPLEFT" relativeTo="$parentSlot22" relativePoint="BOTTOMLEFT" />
+                </Anchors>
+            </Button>
+            <Button name="$parentSlot24" inherits="HealOrganizerDialogSlotTemplate">
+                <Anchors>
+                    <Anchor point="TOPLEFT" relativeTo="$parentSlot23" relativePoint="BOTTOMLEFT" />
+                </Anchors>
+            </Button>
+
             <!-- }}} -->
         </Frames>
     </Frame>
@@ -330,17 +351,6 @@
                         </Offset>
                     </Anchor>
                 </Anchors> 
-                <Layers>
-                    <Layer level="ARTWORK">
-                        <FontString name="$parentRest" inherits="GameFontHighlightSmall" text="REST_LOCALE">
-                            <Anchors>
-                                <Anchor point="BOTTOMLEFT">
-                                    <Offset x="10" y="110"/>
-                                </Anchor>
-                            </Anchors>
-                        </FontString>
-                    </Layer>
-                </Layers>
                 <Frames>
                     <!-- {{{ Groups -->
                     <Frame name="$parentHealerpool" inherits="HealOrganizerDialogHealerpoolTemplate">
@@ -491,13 +501,22 @@
                             <AbsDimension x="145" y="32"/>
                         </Size>
                         <Anchors>
-                            <Anchor point="TOPLEFT" relativeTo="$parentRest" relativePoint="BOTTOMLEFT">
+                            <Anchor point="TOPLEFT" relativeTo="$parentHealGroup7" relativePoint="BOTTOMLEFT">
                                 <Offset>
-                                    <AbsDimension x="10" y="-5"/>
+                                    <AbsDimension x="10" y="-25"/>
                                 </Offset>
                             </Anchor>
                         </Anchors>
                         <Layers>
+                            <Layer level="ARTWORK">
+                                <FontString name="$parentRest" inherits="GameFontHighlightSmall" text="REST_LOCALE">
+                                    <Anchors>
+                                        <Anchor point="TOPLEFT">
+                                            <Offset x="0" y="15"/>
+                                        </Anchor>
+                                    </Anchors>
+                                </FontString>
+                            </Layer>
                             <Layer level="BACKGROUND">
                                     <Texture file="Interface\ChatFrame\UI-ChatInputBorder-Left">
                                             <Size>
@@ -531,8 +550,8 @@
                     <Button name="$parentAutofill" inherits="UIPanelButtonTemplate" text="AUTOFILL_LOCALE">
                         <Size x="100" y="24"/>
                         <Anchors>
-                            <Anchor point="TOPLEFT" relativeTo="$parentRestAction" relativePoint="TOPRIGHT">
-                                <Offset x="5" y="-4"/>
+                            <Anchor point="TOPLEFT" relativeTo="$parentRestAction" relativePoint="BOTTOMLEFT">
+                                <Offset x="-8" y="-5"/>
                             </Anchor>
                         </Anchors>
                         <Scripts>
@@ -643,6 +662,10 @@
                     <Button name="HealOrganizerDialogButton18" inherits="HealOrganizerDialogButtonTemplate"/>
                     <Button name="HealOrganizerDialogButton19" inherits="HealOrganizerDialogButtonTemplate"/>
                     <Button name="HealOrganizerDialogButton20" inherits="HealOrganizerDialogButtonTemplate"/>
+                    <Button name="HealOrganizerDialogButton21" inherits="HealOrganizerDialogButtonTemplate"/>
+                    <Button name="HealOrganizerDialogButton22" inherits="HealOrganizerDialogButtonTemplate"/>
+                    <Button name="HealOrganizerDialogButton23" inherits="HealOrganizerDialogButtonTemplate"/>
+                    <Button name="HealOrganizerDialogButton24" inherits="HealOrganizerDialogButtonTemplate"/>
                     <!-- }}} -->
                 </Frames>
             </Frame> <!-- }}} -->

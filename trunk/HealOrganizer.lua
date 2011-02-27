@@ -147,11 +147,12 @@ dbexample = {
 }
 --]]
 
-
+local HO_DB_DEFAULTS
 
 HealOrganizer.CONST = {}
 HealOrganizer.CONST.NUM_GROUPS = 9
 HealOrganizer.CONST.NUM_SLOTS = 4
+HealOrganizer.CONST.NUM_REST_SLOTS = 24
 
 
 function HealOrganizer:Debug( msg )
@@ -238,29 +239,29 @@ function HealOrganizer:OnInitialize() -- {{{
     self:Debug( "2" .. type( HealOrganizerDialogEinteilung ) );
     self:Debug( "2" .. type( HealOrganizerDialogEinteilungTitle ) );
     HealOrganizerDialogEinteilungTitle:SetText(L["ARRANGEMENT"])
-    for i=1, 20 do
+    for i=1, self.CONST.NUM_REST_SLOTS do
         _G["HealOrganizerDialogEinteilungHealerpoolSlot"..i.."Label"]:SetText(L["FREE"])
     end
     
     HealOrganizerDialogEinteilungAutofill:SetText(L["AUTOFILL"])
     HealOrganizerDialogEinteilungStatsTitle:SetText(L["STATS"])
-    HealOrganizerDialogEinteilungStatsPriests:SetText(L["PRIESTS"]..": "..5)
+    HealOrganizerDialogEinteilungStatsPriests:SetText(LOCALIZED_CLASS_NAMES_MALE.PRIEST .. ": " .. 5)
     HealOrganizerDialogEinteilungStatsPriests:SetTextColor(RAID_CLASS_COLORS["PRIEST"].r,
                                                            RAID_CLASS_COLORS["PRIEST"].g,
                                                            RAID_CLASS_COLORS["PRIEST"].b)
-    HealOrganizerDialogEinteilungStatsDruids:SetText(L["DRUIDS"]..": "..6)
+    HealOrganizerDialogEinteilungStatsDruids:SetText(LOCALIZED_CLASS_NAMES_MALE.DRUID .. ": " .. 6)
     HealOrganizerDialogEinteilungStatsDruids:SetTextColor(RAID_CLASS_COLORS["DRUID"].r,
                                                           RAID_CLASS_COLORS["DRUID"].g,
                                                           RAID_CLASS_COLORS["DRUID"].b)
-    HealOrganizerDialogEinteilungStatsPaladin:SetText(L["PALADINS"]..": "..5)
+    HealOrganizerDialogEinteilungStatsPaladin:SetText(LOCALIZED_CLASS_NAMES_MALE.PALADIN .. ": " .. 5)
     HealOrganizerDialogEinteilungStatsPaladin:SetTextColor(RAID_CLASS_COLORS["PALADIN"].r,
                                                           RAID_CLASS_COLORS["PALADIN"].g,
                                                           RAID_CLASS_COLORS["PALADIN"].b)
-    HealOrganizerDialogEinteilungStatsShaman:SetText(L["SHAMANS"]..": "..5)
+    HealOrganizerDialogEinteilungStatsShaman:SetText(LOCALIZED_CLASS_NAMES_MALE.SHAMAN .. ": " .. 5)
     HealOrganizerDialogEinteilungStatsShaman:SetTextColor(RAID_CLASS_COLORS["SHAMAN"].r,
                                                           RAID_CLASS_COLORS["SHAMAN"].g,
                                                           RAID_CLASS_COLORS["SHAMAN"].b)
-    HealOrganizerDialogEinteilungRest:SetText(L["REMAINS"])
+    HealOrganizerDialogEinteilungRestActionRest:SetText(L["REMAINS"])
     HealOrganizerDialogEinteilungSetsTitle:SetText(L["LABELS"])
     HealOrganizerDialogEinteilungSetsSave:SetText(TEXT(SAVE))
     HealOrganizerDialogEinteilungSetsSaveAs:SetText(L["SAVEAS"])
@@ -481,19 +482,19 @@ end -- }}}
 function HealOrganizer:UpdateDialogValues() -- {{{
     self:RefreshTables()
     -- stats aktuallisieren {{{
-    HealOrganizerDialogEinteilungStatsPriests:SetText(L["PRIESTS"]..": "..stats["PRIEST"])
+    HealOrganizerDialogEinteilungStatsPriests:SetText(LOCALIZED_CLASS_NAMES_MALE.PRIEST .. ": " ..stats["PRIEST"])
     HealOrganizerDialogEinteilungStatsPriests:SetTextColor(RAID_CLASS_COLORS["PRIEST"].r,
                                                            RAID_CLASS_COLORS["PRIEST"].g,
                                                            RAID_CLASS_COLORS["PRIEST"].b)
-    HealOrganizerDialogEinteilungStatsDruids:SetText(L["DRUIDS"]..": "..stats["DRUID"])
+    HealOrganizerDialogEinteilungStatsDruids:SetText(LOCALIZED_CLASS_NAMES_MALE.DRUID .. ": " .. stats["DRUID"])
     HealOrganizerDialogEinteilungStatsDruids:SetTextColor(RAID_CLASS_COLORS["DRUID"].r,
                                                           RAID_CLASS_COLORS["DRUID"].g,
                                                           RAID_CLASS_COLORS["DRUID"].b)
-    HealOrganizerDialogEinteilungStatsPaladin:SetText(L["PALADINS"]..": "..stats["PALADIN"])
+    HealOrganizerDialogEinteilungStatsPaladin:SetText(LOCALIZED_CLASS_NAMES_MALE.PALADIN .. ": " .. stats["PALADIN"])
     HealOrganizerDialogEinteilungStatsPaladin:SetTextColor(RAID_CLASS_COLORS["PALADIN"].r,
                                                           RAID_CLASS_COLORS["PALADIN"].g,
                                                           RAID_CLASS_COLORS["PALADIN"].b)
-    HealOrganizerDialogEinteilungStatsShaman:SetText(L["SHAMANS"]..": "..stats["SHAMAN"])
+    HealOrganizerDialogEinteilungStatsShaman:SetText(LOCALIZED_CLASS_NAMES_MALE.SHAMAN .. ": " .. stats["SHAMAN"])
     HealOrganizerDialogEinteilungStatsShaman:SetTextColor(RAID_CLASS_COLORS["SHAMAN"].r,
                                                           RAID_CLASS_COLORS["SHAMAN"].g,
                                                           RAID_CLASS_COLORS["SHAMAN"].b)
@@ -528,15 +529,17 @@ function HealOrganizer:UpdateDialogValues() -- {{{
     HealOrganizerDialogBroadcastChannelEditbox:SetText(self.db.profile.chan)
     -- einteilungen aktuallisieren -- {{{
     -- alle buttons verstecken
-    for i=1, 20 do
+    for i=1, self.CONST.NUM_REST_SLOTS do
         _G["HealOrganizerDialogButton"..i]:ClearAllPoints()
         _G["HealOrganizerDialogButton"..i]:Hide()
     end
     local zaehler = 1
     -- Rest {{{
+    local restHealer = 1
+    local restNotHealer = self.CONST.NUM_REST_SLOTS
     for i=1, #healingAssignment.Rest do
         -- max 20 durchläufe
-        if zaehler > 20 then
+        if zaehler > self.CONST.NUM_REST_SLOTS - 1 then
             -- zu viel, abbrechen
             break
         end
@@ -547,22 +550,42 @@ function HealOrganizer:UpdateDialogValues() -- {{{
         buttonlabel:SetText(healingAssignment.Rest[i])
         local class, engClass = UnitClass(self:GetUnitByName(healingAssignment.Rest[i]))
         local color = RAID_CLASS_COLORS[engClass];
-        if color then
-            buttoncolor:SetTexture(color.r, color.g, color.b)
-        end
         -- ancher und position einstellen
-        button:SetPoint("TOP", "HealOrganizerDialogEinteilungHealerpoolSlot"..i)
+        if self.db.profile.notHealer[healingAssignment.Rest[i]] then
+            if color then
+                buttoncolor:SetTexture(color.r / 2, color.g / 2, color.b / 2)
+            end
+            button:SetPoint("TOP", "HealOrganizerDialogEinteilungHealerpoolSlot"..restNotHealer)
+            restNotHealer = restNotHealer - 1
+        else
+            if color then
+                buttoncolor:SetTexture(color.r, color.g, color.b)
+            end
+            button:SetPoint("TOP", "HealOrganizerDialogEinteilungHealerpoolSlot"..restHealer)
+            restHealer = restHealer + 1
+        end
         button:Show()
         -- username im button speichern
         button.username = healingAssignment.Rest[i]
         zaehler = zaehler + 1
+    end
+    for i = 1, self.CONST.NUM_REST_SLOTS do
+        if i >= restNotHealer then
+            _G["HealOrganizerDialogEinteilungHealerpoolSlot"..i].notHealer = true
+            _G["HealOrganizerDialogEinteilungHealerpoolSlot"..i.."Label"]:SetText(L["NOT_HEALER"])
+            _G["HealOrganizerDialogEinteilungHealerpoolSlot"..i.."Color"]:SetTexture(0.3, 0.3, 0.3)
+        else
+            _G["HealOrganizerDialogEinteilungHealerpoolSlot"..i].notHealer = nil
+            _G["HealOrganizerDialogEinteilungHealerpoolSlot"..i.."Label"]:SetText(L["FREE"])
+            _G["HealOrganizerDialogEinteilungHealerpoolSlot"..i.."Color"]:SetTexture(0.1, 0.1, 0.1)
+        end
     end
     -- }}}
     -- MTs {{{
     for j=1, self.CONST.NUM_GROUPS do
         for i=1, #healingAssignment[j] do
             -- max 20 durchläufe
-            if zaehler > 20 then
+            if zaehler > self.CONST.NUM_REST_SLOTS then
                 -- zu viel, abbrechen
                 break
             end
@@ -807,6 +830,17 @@ function HealOrganizer:HealerOnDragStop(frame) -- {{{
             self:Debug("vorher "..healer[frame.username])
             -- den heiler da zuordnen
             if "HealOrganizerDialogEinteilungHealerpool" == pool then
+                for i = 1, self.CONST.NUM_REST_SLOTS do
+                    local slot = _G["HealOrganizerDialogEinteilungHealerpoolSlot"..i]
+                    if MouseIsOver(slot) then
+                        self:Debug("Slot " .. i .. "; flag: " .. tostring(slot.notHealer))
+                        if slot.notHealer then
+                            self.db.profile.notHealer[frame.username] = true
+                        else
+                            self.db.profile.notHealer[frame.username] = nil
+                        end
+                    end
+                end
                 healer[frame.username] = "Rest"
                 position[frame.username] = 0
             else
@@ -1157,8 +1191,8 @@ function HealOrganizer:GetLabelByClass(class) -- {{{
        "SHAMAN" ~= class then
        return L["FREE"]
     end
-    self:Debug("GetLabel: "..class.."-"..L[class])
-    return L[class]
+    self:Debug("GetLabel: "..class.."-"..LOCALIZED_CLASS_NAMES_MALE[class])
+    return LOCALIZED_CLASS_NAMES_MALE[class]
 end -- }}}
 
 function HealOrganizer:AutoFill() -- {{{
@@ -1176,7 +1210,7 @@ function HealOrganizer:AutoFill() -- {{{
                     for _, name in pairs(healingAssignment.Rest) do
                         -- klasse abfragen
                         local class, engClass = UnitClass(self:GetUnitByName(name))
-                        if engClass == groupclasses[group][slot] then
+                        if not self.db.profile.notHealer[name] and engClass == groupclasses[group][slot] then
                             -- der spieler passt, einteilen
                             healer[name] = group
                             -- neu aufbauen (impliziert refresh-tables)
@@ -1228,6 +1262,9 @@ HO_DB_DEFAULTS =
                     [9] = {},
                 }
             }
+        },
+        notHealer = {
+            ['*'] = false,
         },
         chan = "",
         autosort = true
