@@ -34,7 +34,6 @@ local HO_SLASH_COMMANDS = {
     }
 };
 
-
 -- units
 -- healer["name"] = "Rest"
 -- Werte: Rest, 1, 2, 3, 4, 5, 6, 7, 8, 9
@@ -154,32 +153,35 @@ HealOrganizer.CONST.NUM_GROUPS = 9
 HealOrganizer.CONST.NUM_SLOTS = 4
 HealOrganizer.CONST.NUM_REST_SLOTS = 24
 
+HealOrganizer.LOG_LEVEL = "Prod"
 
-function HealOrganizer:Debug( msg )
-    --self:Print( msg);
+
+function HealOrganizer:Debug(msg)
+    if self.LOG_LEVEL == "Debug" then
+        self:Print(msg);
+    end
 end;
 
-function HealOrganizer:OnInitialize() -- {{{
-    -- Called when the addon is loaded
-    LibStub("AceConfig-3.0"):RegisterOptionsTable("HealOrganizer", HO_SLASH_COMMANDS, {"healorganizer", "hlorg","ho"})
-    self:Debug( "Init: " .. type(self.db) );    
-    
-    self.db = LibStub("AceDB-3.0"):New("HealOrganizerDB", HO_DB_DEFAULTS );
-    
-    self:Debug( "Init: " .. type(self.db) );    
-    
-    self:RegisterEvent("CHAT_MSG_WHISPER");
-    
-    
-    StaticPopupDialogs["HEALORGANIZER_EDITLABEL"] =
+
+function HealOrganizer:OnInitialize()
+   -- Called when the addon is loaded
+   LibStub("AceConfig-3.0"):RegisterOptionsTable("HealOrganizer", HO_SLASH_COMMANDS, {"healorganizer", "hlorg","ho"})
+   self:Debug( "Init: " .. type(self.db) );
+   
+   self.db = LibStub("AceDB-3.0"):New("HealOrganizerDB", HO_DB_DEFAULTS );   
+   self:Debug( "Init: " .. type(self.db) );
+
+   self:RegisterEvent("CHAT_MSG_WHISPER");
+
+   StaticPopupDialogs["HEALORGANIZER_EDITLABEL"] =
     { --{{{
         text = L["EDIT_LABEL"],
-        button1 = TEXT(SAVE),
-        button2 = TEXT(CANCEL),
+        button1 = SAVE,
+        button2 = CANCEL,
         OnAccept = function(frame)
-            -- button gedrueckt, auf GetName/GetParent achten
-            self:Debug("accept gedrueckt")
-            self:Debug("ID ist "..change_id)
+            -- button pressed, watch GetName/GetParent
+            self:Debug("accept pressed")
+            self:Debug("ID is "..change_id)
             self:SaveNewLabel(change_id, _G[frame:GetName().."EditBox"]:GetText())
         end,
         OnHide = function(frame)
@@ -206,10 +208,10 @@ function HealOrganizer:OnInitialize() -- {{{
     StaticPopupDialogs["HEALORGANIZER_SETSAVEAS"] = 
     { --{{{
         text = L["SET_SAVEAS"],
-        button1 = TEXT(SAVE),
-        button2 = TEXT(CANCEL),
+        button1 = SAVE,
+        button2 = CANCEL,
         OnAccept = function(frame)
-            -- button gedrueckt, auf GetName/GetParent achten
+            -- button pressed, watch GetName/GetParent
             self:SetSaveAs(_G[frame:GetName().."EditBox"]:GetText())
         end,
         OnHide = function(frame)
@@ -229,16 +231,16 @@ function HealOrganizer:OnInitialize() -- {{{
         hideOnEscape = 1,
         hasEditBox = 1,
     }; --}}}
-    
-    
+
     current_set = L["SET_DEFAULT"]
 
     self:Debug("start localization")
 
     self:Debug( "1" .. type( HealOrganizerDialog ) );
-    self:Debug( "2" .. type( HealOrganizerDialogEinteilung ) );
-    self:Debug( "2" .. type( HealOrganizerDialogEinteilungTitle ) );
+    -- self:Debug( "2" .. type( HealOrganizerDialogEinteilung ) );
+    -- self:Debug( "2" .. type( HealOrganizerDialogEinteilungTitle ) );    
     HealOrganizerDialogEinteilungTitle:SetText(L["ARRANGEMENT"])
+    
     for i=1, self.CONST.NUM_REST_SLOTS do
         _G["HealOrganizerDialogEinteilungHealerpoolSlot"..i.."Label"]:SetText(L["FREE"])
     end
@@ -263,16 +265,16 @@ function HealOrganizer:OnInitialize() -- {{{
                                                           RAID_CLASS_COLORS["SHAMAN"].b)
     HealOrganizerDialogEinteilungRestActionRest:SetText(L["REMAINS"])
     HealOrganizerDialogEinteilungSetsTitle:SetText(L["LABELS"])
-    HealOrganizerDialogEinteilungSetsSave:SetText(TEXT(SAVE))
+    HealOrganizerDialogEinteilungSetsSave:SetText(SAVE)
     HealOrganizerDialogEinteilungSetsSaveAs:SetText(L["SAVEAS"])
-    HealOrganizerDialogEinteilungSetsDelete:SetText(TEXT(DELETE))
+    HealOrganizerDialogEinteilungSetsDelete:SetText(DELETE)
     HealOrganizerDialogBroadcastTitle:SetText(L["BROADCAST"])
     HealOrganizerDialogBroadcastChannel:SetText(L["CHANNEL"])
     HealOrganizerDialogBroadcastRaid:SetText(L["RAID"])
     HealOrganizerDialogBroadcastWhisperText:SetText(L["WHISPER"]) -- api changed?
     HealOrganizerDialogClose:SetText(L["CLOSE"])
     HealOrganizerDialogReset:SetText(L["RESET"])
-    -- }}}
+
     self:Debug("end localization")
     self:Debug("channel output: \""..self.db.profile.chan.."\"")
     -- standard fuer dropdown setzen 
@@ -281,8 +283,9 @@ function HealOrganizer:OnInitialize() -- {{{
     self:UpdateDialogValues()
     
     self:Debug( "End init" );
-end -- }}}
 
+end
+  
 function HealOrganizer:OnEnable() -- {{{
     -- Called when the addon is enabled
 end -- }}}
@@ -412,7 +415,7 @@ function HealOrganizer:RefreshTables() --{{{
                     return a<b
             end
             return true
-    else 
+        else 
             if (position[a] and position[b]) then
                 self:Debug("sorting: ("..a..")"..position[a].." < ("..b..")"..position[b])
                 if position[a] == position[b] and lastAction["position"] then
@@ -466,7 +469,7 @@ end -- }}}
 
 function HealOrganizer:Dialog() -- {{{
     -- bei einem leeren raid die heilerzuteilung loeschen
-    if GetNumRaidMembers() == 0 then
+    if GetNumGroupMembers() == 0 then
         self:ResetData()
     end
     self:UpdateDialogValues()
@@ -507,9 +510,9 @@ function HealOrganizer:UpdateDialogValues() -- {{{
             slotlabel:SetText(self:GetLabelByClass(groupclasses[j][i]))
             local color = RAID_CLASS_COLORS[groupclasses[j][i]];
             if color then
-                slotbutton:SetTexture(color.r/1.5, color.g/1.5, color.b/1.5, 0.5)
+                slotbutton:SetColorTexture(color.r/1.5, color.g/1.5, color.b/1.5, 0.5)
             else
-                slotbutton:SetTexture(0.1, 0.1, 0.1) 
+                slotbutton:SetColorTexture(0.1, 0.1, 0.1) 
             end
         end
     end
@@ -550,16 +553,17 @@ function HealOrganizer:UpdateDialogValues() -- {{{
         buttonlabel:SetText(healingAssignment.Rest[i])
         local class, engClass = UnitClass(self:GetUnitByName(healingAssignment.Rest[i]))
         local color = RAID_CLASS_COLORS[engClass];
+        self:Debug("unit "..healingAssignment.Rest[i].." has color "..color.colorStr)
         -- ancher und position einstellen
         if self.db.profile.notHealer[healingAssignment.Rest[i]] then
             if color then
-                buttoncolor:SetTexture(color.r / 2, color.g / 2, color.b / 2)
+                buttoncolor:SetColorTexture(color.r / 2, color.g / 2, color.b / 2)
             end
             button:SetPoint("TOP", "HealOrganizerDialogEinteilungHealerpoolSlot"..restNotHealer)
             restNotHealer = restNotHealer - 1
         else
             if color then
-                buttoncolor:SetTexture(color.r, color.g, color.b)
+                buttoncolor:SetColorTexture(color.r, color.g, color.b)
             end
             button:SetPoint("TOP", "HealOrganizerDialogEinteilungHealerpoolSlot"..restHealer)
             restHealer = restHealer + 1
@@ -573,11 +577,12 @@ function HealOrganizer:UpdateDialogValues() -- {{{
         if i >= restNotHealer then
             _G["HealOrganizerDialogEinteilungHealerpoolSlot"..i].notHealer = true
             _G["HealOrganizerDialogEinteilungHealerpoolSlot"..i.."Label"]:SetText(L["NOT_HEALER"])
-            _G["HealOrganizerDialogEinteilungHealerpoolSlot"..i.."Color"]:SetTexture(0.3, 0.3, 0.3)
+            _G["HealOrganizerDialogEinteilungHealerpoolSlot"..i.."Color"]:SetColorTexture(0.3, 0.3, 0.3)
         else
             _G["HealOrganizerDialogEinteilungHealerpoolSlot"..i].notHealer = nil
             _G["HealOrganizerDialogEinteilungHealerpoolSlot"..i.."Label"]:SetText(L["FREE"])
-            _G["HealOrganizerDialogEinteilungHealerpoolSlot"..i.."Color"]:SetTexture(0.1, 0.1, 0.1)
+            _G["HealOrganizerDialogEinteilungHealerpoolSlot"..i.."Color"]:SetColorTexture(0.1, 0.1, 0.1)
+            
         end
     end
     -- }}}
@@ -597,7 +602,7 @@ function HealOrganizer:UpdateDialogValues() -- {{{
             local class, engClass = UnitClass(self:GetUnitByName(healingAssignment[j][i]))
             local color = RAID_CLASS_COLORS[engClass];
             if color then
-                buttoncolor:SetTexture(color.r, color.g, color.b)
+                buttoncolor:SetColorTexture(color.r, color.g, color.b)
             end
             -- ancher und position einstellen
             button:SetPoint("TOP", "HealOrganizerDialogEinteilungHealGroup"..j.."Slot"..i)
@@ -675,7 +680,7 @@ end -- }}}
 function HealOrganizer:BroadcastChan() --{{{
     self:Debug("BroadcastChan: broadcasting...")
     -- bin ich im chan?
-    if GetNumRaidMembers() == 0 then
+    if GetNumGroupMembers() == 0 then
         self:ErrorMessage(L["NOT_IN_RAID"])
         return;
     end
@@ -695,7 +700,7 @@ end -- }}}
 
 function HealOrganizer:BroadcastRaid() -- {{{
     self:Debug("BroadcastRaid: broadcasting...")
-    if GetNumRaidMembers() == 0 then
+    if GetNumGroupMembers() == 0 then
         self:ErrorMessage(L["NOT_IN_RAID"])
         return;
     end
@@ -1084,6 +1089,13 @@ function HealOrganizer:ReplaceTokens(str) -- {{{
                 self:Debug("oRA MT"..i.." vorhanden")
                 s = s.."("..oRA.maintanktable[i]..")"
             end
+        else 
+            blizz_mt={GetPartyAssignment("MAINTANK")}
+            if blizz_mt[i] then
+                self:Debug("Blizzard MT"..i.." vorhanden")
+                unit_name=GetRaidRosterInfo(blizz_mt[i])
+                s = s.."("..unit_name..")"
+            end
         end
         return s
     end -- }}}
@@ -1097,7 +1109,8 @@ end -- }}}
 function HealOrganizer:CHAT_MSG_WHISPER( ... ) -- {{{
     local msg = select(2, ...);
     local user = select(3, ...);
-    if GetNumRaidMembers() == 0 then
+    user, server = strsplit("-", user);
+    if GetNumGroupMembers() == 0 then
         -- bin nicht im raid, also auch keine zuteilung
         return
     end
@@ -1118,6 +1131,11 @@ function HealOrganizer:CHAT_MSG_WHISPER( ... ) -- {{{
         end
         self:Debug("Sende Spieler %s den Text %q", user, reply)
         ChatThrottleLib:SendChatMessage("NORMAL", 'HO', reply, "WHISPER", nil, user)
+    elseif msg == "healers" then
+        local messages = self:BuildMessages()
+        for _, message in pairs(messages) do
+            ChatThrottleLib:SendChatMessage("NORMAL", "HO", message, "WHISPER", nil, user)
+        end
     end
 end -- }}}
 
