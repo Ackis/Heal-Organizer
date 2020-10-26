@@ -12,6 +12,6 @@
 	<Include file="Libs\AceEvent-3.0\AceEvent-3.0.xml"/>
 	<Include file="Libs\AceLocale-3.0\AceLocale-3.0.xml"/>
 	<Include file="Libs\AceConfig-3.0\AceConfig-3.0.xml"/>
-	<Include file="Libs\ChatThrottleLib\ChatThrottleLib.xml"/>
+	<Include file="Libs\AceComm-3.0\AceComm-3.0.xml"/>
 
 </Ui>
