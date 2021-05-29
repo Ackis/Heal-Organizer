@@ -30,8 +30,7 @@
 
 ## Author: Ackis, Progman, Raegx, nevcairiel, ap0yuv
 
-## Interface: 11304
-## X-Compatible-With: 11304
+## Interface-BCC: 20501
 ## Version: @project-version@
 ## X-Date: @file-date-iso@
 
