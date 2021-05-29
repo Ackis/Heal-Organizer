@@ -280,7 +280,8 @@
             enableMouse="true"
             frameStrata="DIALOG"
             clampedToScreen="true"
-            parent="UIParent">
+            parent="UIParent"
+            inherits="BackdropTemplate">
         <Size>
             <AbsDimension x="480" y="575" />
         </Size>
