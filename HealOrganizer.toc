@@ -30,7 +30,7 @@
 
 ## Author: Ackis, Progman, Raegx, nevcairiel, ap0yuv
 
-## Interface-BCC: 20501
+## Interface: 20501
 ## Version: @project-version@
 ## X-Date: @file-date-iso@
 
